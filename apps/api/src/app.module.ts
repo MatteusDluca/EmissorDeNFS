@@ -15,7 +15,9 @@ import { validationSchema } from './config/validation.schema';
 import { PrismaModule } from './infrastructure/prisma.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CertificatesModule } from './modules/certificates/certificates.module';
+import { NotesModule } from './modules/notes/notes.module';
 import { SalesModule } from './modules/sales/sales.module';
+import { WebhookModule } from './modules/webhook/webhook.module';
 
 @Module({
     imports: [
@@ -50,6 +52,8 @@ import { SalesModule } from './modules/sales/sales.module';
         AuthModule,
         CertificatesModule,
         SalesModule,
+        NotesModule,
+        WebhookModule,
     ],
     controllers: [HealthController],
     providers: [],
