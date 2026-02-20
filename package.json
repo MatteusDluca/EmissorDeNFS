@@ -1,0 +1,19 @@
+{
+  "name": "nfs-e-emissor",
+  "version": "1.0.0",
+  "description": "Emissor de NFS-e Simplificado - Monorepo",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "lint": "eslint . --ext .ts,.js",
+    "test": "npm run test --workspaces --if-present",
+    "test:cov": "npm run test:cov --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present"
+  },
+  "keywords": ["nfse", "nota-fiscal", "emissor"],
+  "author": "Matteus Dluca",
+  "license": "MIT"
+}
