@@ -1,0 +1,14 @@
+{
+    "name": "@nfse/shared",
+    "version": "1.0.0",
+    "description": "Shared domain entities, DTOs, interfaces and utils for NFS-e Emissor",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "build": "tsc",
+        "prepublishOnly": "npm run build"
+    },
+    "keywords": [],
+    "author": "Matteus Dluca",
+    "license": "MIT"
+}
