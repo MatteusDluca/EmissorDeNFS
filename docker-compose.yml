@@ -1,0 +1,162 @@
+version: '3.8'
+
+services:
+  # ─── PostgreSQL ───────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: nfse-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-nfse_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-nfse_pass}
+      POSTGRES_DB: ${POSTGRES_DB:-nfse_db}
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infra/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-nfse_user} -d ${POSTGRES_DB:-nfse_db}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - nfse-network
+
+  # ─── Redis ────────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: nfse-redis
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: redis-server --appendonly yes
+    networks:
+      - nfse-network
+
+  # ─── Prefeitura Mock ─────────────────────────────────────────
+  prefeitura-mock:
+    build:
+      context: ./apps/prefeitura-mock
+      dockerfile: Dockerfile
+    container_name: nfse-prefeitura-mock
+    restart: unless-stopped
+    ports:
+      - '4000:4000'
+    healthcheck:
+      test: ['CMD', 'wget', '--spider', '-q', 'http://localhost:4000/health']
+      interval: 15s
+      timeout: 5s
+      retries: 3
+    networks:
+      - nfse-network
+
+  # ─── API (NestJS) ────────────────────────────────────────────
+  api:
+    build:
+      context: .
+      dockerfile: ./apps/api/Dockerfile
+    container_name: nfse-api
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-nfse_user}:${POSTGRES_PASSWORD:-nfse_pass}@postgres:5432/${POSTGRES_DB:-nfse_db}?schema=public
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-change-in-production}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-24h}
+      CERT_SECRET: ${CERT_SECRET:-your-aes-256-key-must-be-32-chars!!}
+      PREFEITURA_MOCK_URL: http://prefeitura-mock:4000/nfse
+      WEBHOOK_URL: ${WEBHOOK_URL:-}
+      WEBHOOK_TIMEOUT_MS: ${WEBHOOK_TIMEOUT_MS:-5000}
+      API_PORT: 3000
+      NODE_ENV: ${NODE_ENV:-development}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin}
+    volumes:
+      - ./certs:/app/certs
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ['CMD', 'wget', '--spider', '-q', 'http://localhost:3000/health']
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - nfse-network
+
+  # ─── Worker (NestJS Headless) ─────────────────────────────────
+  worker:
+    build:
+      context: .
+      dockerfile: ./apps/worker/Dockerfile
+    container_name: nfse-worker
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-nfse_user}:${POSTGRES_PASSWORD:-nfse_pass}@postgres:5432/${POSTGRES_DB:-nfse_db}?schema=public
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      CERT_SECRET: ${CERT_SECRET:-your-aes-256-key-must-be-32-chars!!}
+      PREFEITURA_MOCK_URL: http://prefeitura-mock:4000/nfse
+      WEBHOOK_URL: ${WEBHOOK_URL:-}
+      WEBHOOK_TIMEOUT_MS: ${WEBHOOK_TIMEOUT_MS:-5000}
+      WORKER_CONCURRENCY: ${WORKER_CONCURRENCY:-3}
+      NODE_ENV: ${NODE_ENV:-development}
+    volumes:
+      - ./certs:/app/certs
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      prefeitura-mock:
+        condition: service_healthy
+    healthcheck:
+      test: ['CMD', 'node', '-e', 'process.exit(0)']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    networks:
+      - nfse-network
+
+  # ─── Nginx Reverse Proxy ─────────────────────────────────────
+  nginx:
+    image: nginx:alpine
+    container_name: nfse-nginx
+    restart: unless-stopped
+    ports:
+      - '80:80'
+    volumes:
+      - ./infra/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ['CMD', 'wget', '--spider', '-q', 'http://localhost:80/health']
+      interval: 15s
+      timeout: 5s
+      retries: 3
+    networks:
+      - nfse-network
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  nfse-network:
+    driver: bridge
