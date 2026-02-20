@@ -1,0 +1,76 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── User ──────────────────────────────────────────────────────
+model User {
+  id           String        @id @default(uuid())
+  username     String        @unique
+  password     String
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+  certificates Certificate[]
+  sales        Sale[]
+
+  @@map("users")
+}
+
+// ─── Certificate ───────────────────────────────────────────────
+model Certificate {
+  id                String   @id @default(uuid())
+  userId            String   @map("user_id")
+  filePath          String   @map("file_path")
+  encryptedPassword String   @map("encrypted_password")
+  iv                String
+  authTag           String   @map("auth_tag")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("certificates")
+}
+
+// ─── Sale ──────────────────────────────────────────────────────
+model Sale {
+  id                 String         @id @default(uuid())
+  userId             String         @map("user_id")
+  externalId         String         @unique @map("external_id")
+  tomakerName        String         @map("tomaker_name")
+  tomakerDocument    String         @map("tomaker_document")
+  tomakerEmail       String         @map("tomaker_email")
+  serviceDescription String         @map("service_description")
+  amount             Decimal        @db.Decimal(15, 2)
+  status             String         @default("PENDING")
+  createdAt          DateTime       @default(now()) @map("created_at")
+  updatedAt          DateTime       @updatedAt @map("updated_at")
+
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  noteEmission NoteEmission?
+
+  @@map("sales")
+}
+
+// ─── NoteEmission ──────────────────────────────────────────────
+model NoteEmission {
+  id           String    @id @default(uuid())
+  saleId       String    @unique @map("sale_id")
+  status       String    @default("PENDING")
+  protocol     String?
+  xmlSent      String?   @map("xml_sent") @db.Text
+  xmlResponse  String?   @map("xml_response") @db.Text
+  errorMessage String?   @map("error_message") @db.Text
+  attempts     Int       @default(0)
+  processedAt  DateTime? @map("processed_at")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  sale Sale @relation(fields: [saleId], references: [id], onDelete: Cascade)
+
+  @@map("note_emissions")
+}
