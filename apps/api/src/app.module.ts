@@ -14,6 +14,7 @@ import {
 import { validationSchema } from './config/validation.schema';
 import { PrismaModule } from './infrastructure/prisma.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { CertificatesModule } from './modules/certificates/certificates.module';
 
 @Module({
     imports: [
@@ -46,6 +47,7 @@ import { AuthModule } from './modules/auth/auth.module';
 
         // ─── Feature Modules ────────────────────────────────────
         AuthModule,
+        CertificatesModule,
     ],
     controllers: [HealthController],
     providers: [],
