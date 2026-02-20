@@ -1,0 +1,16 @@
+{
+    "name": "@nfse/prefeitura-mock",
+    "version": "1.0.0",
+    "description": "Mock da Prefeitura para emissão de NFS-e",
+    "main": "src/app.js",
+    "scripts": {
+        "start": "node src/app.js",
+        "dev": "node --watch src/app.js"
+    },
+    "dependencies": {
+        "express": "^4.18.2"
+    },
+    "keywords": [],
+    "author": "Matteus Dluca",
+    "license": "MIT"
+}
