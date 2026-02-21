@@ -131,7 +131,7 @@ export class CertificatesService {
             orderBy: { createdAt: 'desc' },
         });
 
-        return certs.map(c => ({
+        return certs.map((c: any) => ({
             id: c.id,
             createdAt: c.createdAt,
             // Apenas para display na UI

@@ -65,7 +65,7 @@ export class SalesService {
         }
 
         // Criar Sale + NoteEmission em transação
-        const result = await this.prisma.$transaction(async (tx) => {
+        const result = await this.prisma.$transaction(async (tx: any) => {
             const sale = await tx.sale.create({
                 data: {
                     userId,

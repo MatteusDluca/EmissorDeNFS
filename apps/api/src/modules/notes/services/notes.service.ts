@@ -48,7 +48,7 @@ export class NotesService {
 
         return {
             total: notes.length,
-            notes: notes.map((note) => ({
+            notes: notes.map((note: any) => ({
                 id: note.id,
                 saleId: note.saleId,
                 externalId: note.sale.externalId,
