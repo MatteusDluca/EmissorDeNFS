@@ -31,6 +31,9 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "@nfse/shared": [
+        "../../packages/shared/src/index.ts"
       ]
     }
   },
