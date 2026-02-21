@@ -5,13 +5,12 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Skeleton } from '@/components/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { api } from '@/lib/api';
-import { NoteResponseDto } from '@nfse/shared';
+import type { NoteResponseDto } from '@nfse/shared';
 import { useQuery } from '@tanstack/react-query';
 import { Activity, AlertCircle, CheckCircle2, Clock, FileCode2, RefreshCw } from 'lucide-react';
-import { useState } from 'react';
 
 export function Dashboard() {
-    const [selectedNote, setSelectedNote] = useState<NoteResponseDto | null>(null);
+
 
     const fetchNotes = async (): Promise<NoteResponseDto[]> => {
         const response = await api.get('/notes');
@@ -117,7 +116,7 @@ export function Dashboard() {
                                         {/* Modal Details */}
                                         <Dialog>
                                             <DialogTrigger asChild>
-                                                <Button variant="ghost" size="sm" onClick={() => setSelectedNote(note)} className="h-8 text-xs hover:bg-primary/20 hover:text-primary">
+                                                <Button variant="ghost" size="sm" className="h-8 text-xs hover:bg-primary/20 hover:text-primary">
                                                     Detalhes
                                                 </Button>
                                             </DialogTrigger>

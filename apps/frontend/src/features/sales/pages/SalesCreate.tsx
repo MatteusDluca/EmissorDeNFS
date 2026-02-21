@@ -4,10 +4,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { api } from '@/lib/api';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CreateSaleDto } from '@nfse/shared';
+import type { CreateSaleDto } from '@nfse/shared';
 import { FileText, Send } from 'lucide-react';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -35,7 +35,7 @@ export function SalesCreate() {
         }
     });
 
-    const onSubmit = async (data: SaleFormValues) => {
+    const onSubmit: SubmitHandler<SaleFormValues> = async (data) => {
         try {
             setIsLoading(true);
             const payload: CreateSaleDto = data;
