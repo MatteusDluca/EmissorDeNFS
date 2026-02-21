@@ -9,11 +9,16 @@
   ],
   "scripts": {
     "lint": "eslint . --ext .ts,.js",
+    "start:local": "node scripts/start-local.js",
     "test": "npm run test --workspaces --if-present",
     "test:cov": "npm run test:cov --workspaces --if-present",
     "build": "npm run build --workspaces --if-present"
   },
-  "keywords": ["nfse", "nota-fiscal", "emissor"],
+  "keywords": [
+    "nfse",
+    "nota-fiscal",
+    "emissor"
+  ],
   "author": "Matteus Dluca",
   "license": "MIT"
 }

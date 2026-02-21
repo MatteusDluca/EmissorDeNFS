@@ -4,20 +4,35 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../../../infrastructure/prisma.service';
 import { CertificatesService } from '../services/certificates.service';
 
-// Mock crypto e fs
-jest.mock('../../../../../packages/shared/src/crypto', () => ({
-    encrypt: jest.fn().mockReturnValue({
-        encrypted: 'encrypted_password',
-        iv: 'mock_iv',
-        authTag: 'mock_auth_tag',
-    }),
+// Mock shared (encrypt/decrypt)
+const mockEncrypt = jest.fn().mockReturnValue({
+    encrypted: 'encrypted_password',
+    iv: 'mock_iv',
+    authTag: 'mock_auth_tag',
+});
+
+jest.mock('../../../common/shared', () => ({
+    encrypt: (...args: unknown[]) => mockEncrypt(...args),
     decrypt: jest.fn().mockReturnValue('decrypted_password'),
+    QUEUE_NAME: 'note-emission',
+    QUEUE_JOB_NAME: 'process-note',
+    BULLMQ_RETRY_ATTEMPTS: 3,
+    BULLMQ_BACKOFF_TYPE: 'exponential',
+    BULLMQ_BACKOFF_DELAY: 2000,
+    CRYPTO_ALGORITHM: 'aes-256-gcm',
+    CRYPTO_KEY_LENGTH: 32,
+    CRYPTO_IV_LENGTH: 16,
+    CERT_UPLOAD_DIR: './certs',
+    deriveKey: jest.fn(),
 }));
 
+// Mock fs
 jest.mock('fs', () => ({
     existsSync: jest.fn().mockReturnValue(true),
     mkdirSync: jest.fn(),
     writeFileSync: jest.fn(),
+    readFileSync: jest.fn(),
+    __esModule: false,
 }));
 
 describe('CertificatesService', () => {
@@ -37,6 +52,8 @@ describe('CertificatesService', () => {
     };
 
     beforeEach(async () => {
+        jest.clearAllMocks();
+
         const module: TestingModule = await Test.createTestingModule({
             providers: [
                 CertificatesService,
@@ -48,10 +65,6 @@ describe('CertificatesService', () => {
         service = module.get<CertificatesService>(CertificatesService);
     });
 
-    afterEach(() => {
-        jest.clearAllMocks();
-    });
-
     describe('uploadCertificate', () => {
         const mockFile = {
             originalname: 'cert.pfx',
@@ -60,6 +73,7 @@ describe('CertificatesService', () => {
         } as Express.Multer.File;
 
         it('deve fazer upload e criptografar senha do certificado', async () => {
+            // Nenhum certificado existente
             mockPrisma.certificate.findFirst.mockResolvedValue(null);
             mockPrisma.certificate.create.mockResolvedValue({
                 id: 'cert-1',
@@ -73,8 +87,10 @@ describe('CertificatesService', () => {
                 'cert_password',
             );
 
+            expect(result).toBeDefined();
             expect(result.id).toBe('cert-1');
             expect(result.message).toContain('segurança');
+            expect(mockEncrypt).toHaveBeenCalledWith('cert_password', 'test_cert_secret');
             expect(mockPrisma.certificate.create).toHaveBeenCalled();
         });
 
@@ -90,6 +106,7 @@ describe('CertificatesService', () => {
         });
 
         it('deve substituir certificado existente', async () => {
+            // Certificado existente
             mockPrisma.certificate.findFirst.mockResolvedValue({
                 id: 'old-cert',
                 userId: 'user-1',

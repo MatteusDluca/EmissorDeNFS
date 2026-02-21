@@ -4,9 +4,8 @@ import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
 import { Job } from 'bullmq';
 import * as fs from 'fs';
-import { QUEUE_NAME } from '../../../../packages/shared/src/constants';
-import { decrypt } from '../../../../packages/shared/src/crypto';
 import { PrismaService } from '../prisma.service';
+import { QUEUE_NAME, decrypt } from '../shared';
 
 interface NoteJobData {
     saleId: string;

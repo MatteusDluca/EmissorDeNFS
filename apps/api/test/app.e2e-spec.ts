@@ -1,7 +1,7 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
+const request = require('supertest');
 
 /**
  * Testes E2E (end-to-end) da API NFS-e
@@ -31,7 +31,7 @@ describe('API E2E Tests', () => {
             return request(app.getHttpServer())
                 .get('/health')
                 .expect(200)
-                .expect((res) => {
+                .expect((res: any) => {
                     expect(res.body).toHaveProperty('status', 'ok');
                     expect(res.body).toHaveProperty('service', 'nfse-api');
                 });

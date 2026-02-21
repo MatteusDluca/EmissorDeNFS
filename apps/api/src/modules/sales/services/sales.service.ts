@@ -12,7 +12,7 @@ import {
     BULLMQ_RETRY_ATTEMPTS,
     QUEUE_JOB_NAME,
     QUEUE_NAME,
-} from '../../../../../../packages/shared/src/constants';
+} from '../../../common/shared';
 import { PrismaService } from '../../../infrastructure/prisma.service';
 import { CertificatesService } from '../../certificates/services/certificates.service';
 import { CreateSaleDto } from '../dto/create-sale.dto';

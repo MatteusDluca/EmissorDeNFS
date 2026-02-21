@@ -1,6 +1,6 @@
 import { BullModule } from '@nestjs/bullmq';
 import { Module } from '@nestjs/common';
-import { QUEUE_NAME } from '../../../../../packages/shared/src/constants';
+import { QUEUE_NAME } from '../../common/shared';
 import { CertificatesModule } from '../certificates/certificates.module';
 import { SalesController } from './controllers/sales.controller';
 import { SalesService } from './services/sales.service';

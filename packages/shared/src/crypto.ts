@@ -21,7 +21,7 @@ export interface EncryptedData {
  * Deriva uma chave de 32 bytes a partir do secret usando SHA-256.
  * Garante que qualquer string de input resulte em exatamente 32 bytes.
  */
-function deriveKey(secret: string): Buffer {
+export function deriveKey(secret: string): Buffer {
     return crypto.createHash('sha256').update(secret).digest().subarray(0, CRYPTO_KEY_LENGTH);
 }
 

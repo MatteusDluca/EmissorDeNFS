@@ -1,9 +1,9 @@
 import { BullModule } from '@nestjs/bullmq';
 import { Global, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { QUEUE_NAME } from '../../../packages/shared/src/constants';
 import { PrismaService } from './prisma.service';
 import { NoteEmissionProcessor } from './processors/note-emission.processor';
+import { QUEUE_NAME } from './shared';
 
 @Global()
 @Module({

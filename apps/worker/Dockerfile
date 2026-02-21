@@ -1,22 +1,25 @@
 # ─── Stage 1: Install dependencies ─────────────────────────────
 FROM node:20-alpine AS deps
 
+RUN apk add --no-cache openssl
+
 WORKDIR /app
 
 COPY package.json ./
 COPY apps/worker/package.json ./apps/worker/
 COPY packages/shared/package.json ./packages/shared/
 
-RUN npm install --workspace=@nfse/worker --include-workspace-root 2>/dev/null || npm install
+# Install all dependencies (monorepo flat install)
+RUN npm install
 
 # ─── Stage 2: Build ────────────────────────────────────────────
 FROM node:20-alpine AS builder
 
+RUN apk add --no-cache openssl
+
 WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/apps/worker/node_modules ./apps/worker/node_modules 2>/dev/null || true
-COPY --from=deps /app/packages/shared/node_modules ./packages/shared/node_modules 2>/dev/null || true
 
 COPY packages/shared/ ./packages/shared/
 COPY apps/worker/ ./apps/worker/
@@ -25,18 +28,20 @@ COPY tsconfig.json ./
 
 # Generate Prisma Client (uses API schema)
 WORKDIR /app/apps/api
-RUN npx prisma generate 2>/dev/null || true
+RUN npx prisma generate
 
 # Build shared
 WORKDIR /app/packages/shared
-RUN npx tsc 2>/dev/null || true
+RUN npx tsc || true
 
 # Build Worker
 WORKDIR /app/apps/worker
-RUN npx nest build 2>/dev/null || true
+RUN npx nest build
 
 # ─── Stage 3: Production ───────────────────────────────────────
 FROM node:20-alpine AS production
+
+RUN apk add --no-cache openssl
 
 WORKDIR /app
 
@@ -45,11 +50,13 @@ RUN addgroup -g 1001 -S nodejs && \
 
 COPY --from=builder /app/apps/worker/dist ./dist
 COPY --from=builder /app/apps/api/prisma ./prisma
-COPY --from=builder /app/apps/worker/node_modules ./node_modules
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma 2>/dev/null || true
+COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/apps/worker/package.json ./
 
-RUN mkdir -p /app/certs && chown -R nfse:nodejs /app/certs
+RUN mkdir -p /app/certs && \
+    chown -R nfse:nodejs /app/certs && \
+    chown -R nfse:nodejs /app/node_modules/.prisma && \
+    chown -R nfse:nodejs /app/node_modules/@prisma
 
 USER nfse
 

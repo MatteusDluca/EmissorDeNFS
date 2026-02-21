@@ -16,7 +16,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./infra/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-nfse_user} -d ${POSTGRES_DB:-nfse_db}']
+      test: [ 'CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-nfse_user} -d ${POSTGRES_DB:-nfse_db}' ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -29,11 +29,11 @@ services:
     container_name: nfse-redis
     restart: unless-stopped
     ports:
-      - '6379:6379'
+      - '6380:6379'
     volumes:
       - redis_data:/data
     healthcheck:
-      test: ['CMD', 'redis-cli', 'ping']
+      test: [ 'CMD', 'redis-cli', 'ping' ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -51,7 +51,7 @@ services:
     ports:
       - '4000:4000'
     healthcheck:
-      test: ['CMD', 'wget', '--spider', '-q', 'http://localhost:4000/health']
+      test: [ 'CMD', 'wget', '--spider', '-q', 'http://localhost:4000/health' ]
       interval: 15s
       timeout: 5s
       retries: 3
@@ -89,7 +89,7 @@ services:
       redis:
         condition: service_healthy
     healthcheck:
-      test: ['CMD', 'wget', '--spider', '-q', 'http://localhost:3000/health']
+      test: [ 'CMD', 'wget', '--spider', '-q', 'http://localhost:3000/health' ]
       interval: 15s
       timeout: 5s
       retries: 5
@@ -124,7 +124,7 @@ services:
       prefeitura-mock:
         condition: service_healthy
     healthcheck:
-      test: ['CMD', 'node', '-e', 'process.exit(0)']
+      test: [ 'CMD', 'node', '-e', 'process.exit(0)' ]
       interval: 30s
       timeout: 5s
       retries: 3
@@ -144,7 +144,7 @@ services:
       api:
         condition: service_healthy
     healthcheck:
-      test: ['CMD', 'wget', '--spider', '-q', 'http://localhost:80/health']
+      test: [ 'CMD', 'wget', '--spider', '-q', 'http://localhost:80/health' ]
       interval: 15s
       timeout: 5s
       retries: 3

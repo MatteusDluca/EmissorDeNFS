@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  # ─── PostgreSQL ───────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: nfse-postgres-local
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-nfse_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-nfse_pass}
+      POSTGRES_DB: ${POSTGRES_DB:-nfse_db}
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data_local:/var/lib/postgresql/data
+      - ./infra/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: [ 'CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-nfse_user} -d ${POSTGRES_DB:-nfse_db}' ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─── Redis ────────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: nfse-redis-local
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data_local:/data
+    healthcheck:
+      test: [ 'CMD', 'redis-cli', 'ping' ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: redis-server --appendonly yes
+
+  # ─── Prefeitura Mock ─────────────────────────────────────────
+  prefeitura-mock:
+    build:
+      context: ./apps/prefeitura-mock
+      dockerfile: Dockerfile
+    container_name: nfse-prefeitura-mock-local
+    restart: unless-stopped
+    ports:
+      - '4000:4000'
+    healthcheck:
+      test: [ 'CMD', 'wget', '--spider', '-q', 'http://localhost:4000/health' ]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  postgres_data_local:
+  redis_data_local:

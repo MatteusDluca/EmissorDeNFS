@@ -12,8 +12,8 @@ import {
     UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { MAX_CERT_FILE_SIZE } from '../../../../../../packages/shared/src/constants';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
+import { MAX_CERT_FILE_SIZE } from '../../../common/shared';
 import { UploadCertificateDto } from '../dto/upload-certificate.dto';
 import { CertificatesService } from '../services/certificates.service';
 

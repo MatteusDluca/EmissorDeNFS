@@ -7,8 +7,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import * as fs from 'fs';
 import * as path from 'path';
-import { CERT_UPLOAD_DIR } from '../../../../../packages/shared/src/constants';
-import { decrypt, encrypt } from '../../../../../packages/shared/src/crypto';
+import { CERT_UPLOAD_DIR, decrypt, encrypt } from '../../../common/shared';
 import { PrismaService } from '../../../infrastructure/prisma.service';
 
 @Injectable()

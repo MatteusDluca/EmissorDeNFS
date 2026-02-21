@@ -1,6 +1,8 @@
 # ─── Stage 1: Install dependencies ─────────────────────────────
 FROM node:20-alpine AS deps
 
+RUN apk add --no-cache openssl
+
 WORKDIR /app
 
 # Copy root workspace files
@@ -8,17 +10,17 @@ COPY package.json ./
 COPY apps/api/package.json ./apps/api/
 COPY packages/shared/package.json ./packages/shared/
 
-# Install all dependencies
-RUN npm install --workspace=@nfse/api --include-workspace-root 2>/dev/null || npm install
+# Install all dependencies (monorepo flat install)
+RUN npm install
 
 # ─── Stage 2: Build ────────────────────────────────────────────
 FROM node:20-alpine AS builder
 
+RUN apk add --no-cache openssl
+
 WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/apps/api/node_modules ./apps/api/node_modules 2>/dev/null || true
-COPY --from=deps /app/packages/shared/node_modules ./packages/shared/node_modules 2>/dev/null || true
 
 COPY packages/shared/ ./packages/shared/
 COPY apps/api/ ./apps/api/
@@ -26,18 +28,20 @@ COPY tsconfig.json ./
 
 # Generate Prisma Client
 WORKDIR /app/apps/api
-RUN npx prisma generate 2>/dev/null || true
+RUN npx prisma generate
 
 # Build shared
 WORKDIR /app/packages/shared
-RUN npx tsc 2>/dev/null || true
+RUN npx tsc || true
 
 # Build API
 WORKDIR /app/apps/api
-RUN npx nest build 2>/dev/null || true
+RUN npx nest build && npx tsc prisma/seed.ts
 
 # ─── Stage 3: Production ───────────────────────────────────────
 FROM node:20-alpine AS production
+
+RUN apk add --no-cache openssl wget
 
 WORKDIR /app
 
@@ -48,12 +52,14 @@ RUN addgroup -g 1001 -S nodejs && \
 # Copy built files
 COPY --from=builder /app/apps/api/dist ./dist
 COPY --from=builder /app/apps/api/prisma ./prisma
-COPY --from=builder /app/apps/api/node_modules ./node_modules
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma 2>/dev/null || true
+COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/apps/api/package.json ./
 
-# Create certs directory
-RUN mkdir -p /app/certs && chown -R nfse:nodejs /app/certs
+# Create certs directory and ensure nfse user can write to prisma engines
+RUN mkdir -p /app/certs && \
+    chown -R nfse:nodejs /app/certs && \
+    chown -R nfse:nodejs /app/node_modules/.prisma && \
+    chown -R nfse:nodejs /app/node_modules/@prisma
 
 USER nfse
 
@@ -62,4 +68,4 @@ EXPOSE 3000
 HEALTHCHECK --interval=15s --timeout=5s --retries=5 --start-period=30s \
     CMD wget --spider -q http://localhost:3000/health || exit 1
 
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main"]
+CMD ["sh", "-c", "npx prisma db push --accept-data-loss && node prisma/seed.js && node dist/main"]

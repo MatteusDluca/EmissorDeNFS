@@ -1,7 +1,7 @@
 import { getQueueToken } from '@nestjs/bullmq';
 import { BadRequestException, ConflictException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { QUEUE_NAME } from '../../../../../../packages/shared/src/constants';
+import { QUEUE_NAME } from '../../../common/shared';
 import { PrismaService } from '../../../infrastructure/prisma.service';
 import { CertificatesService } from '../../certificates/services/certificates.service';
 import { SalesService } from '../services/sales.service';

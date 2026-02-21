@@ -1,0 +1,28 @@
+# ─── Test runner com todo o source code + dependências ─────────
+FROM node:20-alpine
+
+RUN apk add --no-cache openssl
+
+WORKDIR /app
+
+# Copy tudo do monorepo
+COPY package.json ./
+COPY apps/api/package.json ./apps/api/
+COPY packages/shared/package.json ./packages/shared/
+
+# Install all deps (inclui devDependencies para testes)
+RUN npm install
+
+# Copy source code
+COPY packages/shared/ ./packages/shared/
+COPY apps/api/ ./apps/api/
+COPY tsconfig.json ./
+
+# Generate Prisma Client
+WORKDIR /app/apps/api
+RUN npx prisma generate
+
+# Volta para root
+WORKDIR /app
+
+CMD ["sh", "-c", "cd apps/api && npx jest --passWithNoTests --forceExit --verbose"]

@@ -7,7 +7,10 @@ COPY package.json ./
 RUN npm install --production
 
 # ─── Stage 2: Production ───────────────────────────────────────
+# ─── Stage 2: Production ───────────────────────────────────────
 FROM node:20-alpine AS production
+
+RUN apk add --no-cache wget
 
 WORKDIR /app
 
