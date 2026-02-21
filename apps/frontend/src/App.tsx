@@ -5,10 +5,8 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Login } from '@/features/auth/pages/Login';
 import { Certificates } from '@/features/certificates/pages/CertificateUpload';
-
-// Criarei mock screens para as demais fases
-const Dashboard = () => <div className="p-8">Dashboard em construção (Fase 4)...</div>;
-const Sales = () => <div className="p-8">Formulário de Vendas em construção (Fase 4)...</div>;
+import { Dashboard } from '@/features/sales/pages/Dashboard';
+import { SalesCreate as Sales } from '@/features/sales/pages/SalesCreate';
 
 const queryClient = new QueryClient();
 
