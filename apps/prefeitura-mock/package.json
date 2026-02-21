@@ -5,7 +5,8 @@
     "main": "src/app.js",
     "scripts": {
         "start": "node src/app.js",
-        "dev": "node --watch src/app.js"
+        "dev": "node --watch src/app.js",
+        "test": "echo \"Mock does not need tests\""
     },
     "dependencies": {
         "express": "^4.18.2"

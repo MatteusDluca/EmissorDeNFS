@@ -105,13 +105,12 @@ describe('CertificatesService', () => {
             ).rejects.toThrow(BadRequestException);
         });
 
-        it('deve substituir certificado existente', async () => {
+        it('deve armazenar um novo certificado independente de haver anteriores', async () => {
             // Certificado existente
             mockPrisma.certificate.findFirst.mockResolvedValue({
                 id: 'old-cert',
                 userId: 'user-1',
             });
-            mockPrisma.certificate.delete.mockResolvedValue({});
             mockPrisma.certificate.create.mockResolvedValue({
                 id: 'new-cert',
                 userId: 'user-1',
@@ -125,9 +124,7 @@ describe('CertificatesService', () => {
             );
 
             expect(result.id).toBe('new-cert');
-            expect(mockPrisma.certificate.delete).toHaveBeenCalledWith({
-                where: { id: 'old-cert' },
-            });
+            expect(mockPrisma.certificate.delete).not.toHaveBeenCalled();
         });
     });
 

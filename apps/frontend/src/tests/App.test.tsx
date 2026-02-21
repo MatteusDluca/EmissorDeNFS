@@ -40,8 +40,8 @@ describe('Frontend Integration Tests', () => {
         fireEvent.click(submitBtn);
 
         await waitFor(() => {
-            // Mocked /notes API should return "Painel de Notas", verifying Dashboard loaded
-            expect(screen.getByText('Painel de Notas (Real-time)')).toBeInTheDocument();
+            // Mocked /notes API should return "Painel Resumo", verifying Dashboard loaded
+            expect(screen.getByText('Painel Resumo (Real-time)')).toBeInTheDocument();
         });
     });
 
@@ -52,7 +52,7 @@ describe('Frontend Integration Tests', () => {
         window.history.pushState({}, 'Dashboard', '/dashboard');
         render(<App />);
 
-        expect(screen.getByText('Painel de Notas (Real-time)')).toBeInTheDocument();
+        expect(screen.getByText('Painel Resumo (Real-time)')).toBeInTheDocument();
 
         // Aguarda o Tanstack Query processar a API Mock do MSW
         await waitFor(() => {

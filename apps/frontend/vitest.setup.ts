@@ -3,16 +3,22 @@ import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 
 export const handlers = [
-    http.post('http://localhost/api/auth/login', () => {
+    http.post('http://localhost:3000/auth/login', () => {
         return HttpResponse.json({ accessToken: 'fake-token' })
     }),
-    http.get('http://localhost/api/notes', () => {
-        return HttpResponse.json([
-            { id: '1', externalId: 'venda-teste', status: 'SUCCESS', protocol: '123' },
-            { id: '2', externalId: 'venda-teste-2', status: 'PROCESSING' }
-        ])
+    http.get('http://localhost:3000/notes/kpi', () => {
+        return HttpResponse.json({ totalAmount: 15000, totalSuccess: 1, totalFailed: 0, totalProcessing: 1 })
     }),
-    http.post('http://localhost/api/certificates/upload', () => {
+    http.get('http://localhost:3000/notes', () => {
+        return HttpResponse.json({
+            total: 2,
+            notes: [
+                { id: '1', externalId: 'venda-teste', status: 'SUCCESS', protocol: '123' },
+                { id: '2', externalId: 'venda-teste-2', status: 'PROCESSING' }
+            ]
+        })
+    }),
+    http.post('http://localhost:3000/certificates/upload', () => {
         return HttpResponse.json({ success: true })
     })
 ];
