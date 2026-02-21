@@ -4,6 +4,7 @@ import {
     Logger,
     NotFoundException,
     Param,
+    Post,
     Query,
     Request,
     UseGuards,
@@ -28,6 +29,29 @@ export class NotesController {
     ) {
         this.logger.log(`GET /notes - userId: ${req.user.id}, status: ${status || 'all'}`);
         return this.notesService.findAllByUser(req.user.id, status);
+    }
+
+    /**
+     * GET /notes/kpi → Agregação de status e financeiro
+     */
+    @Get('kpi')
+    async getKpi(
+        @Request() req: { user: { id: string } },
+    ) {
+        this.logger.log(`GET /notes/kpi - userId: ${req.user.id}`);
+        return this.notesService.getKpiSummary(req.user.id);
+    }
+
+    /**
+     * POST /notes/:id/retry → Reenfileira nfse
+     */
+    @Post(':id/retry')
+    async retryNote(
+        @Param('id') id: string,
+        @Request() req: { user: { id: string } },
+    ) {
+        this.logger.log(`POST /notes/${id}/retry - userId: ${req.user.id}`);
+        return this.notesService.retryNote(id, req.user.id);
     }
 
     /**

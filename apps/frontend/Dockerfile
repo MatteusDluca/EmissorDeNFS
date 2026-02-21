@@ -1,27 +1,35 @@
-FROM node:20-alpine AS base
+# ─── Stage 1: Build ──────────────────────────────────────────────
+FROM node:20-alpine AS builder
 
-# Dev stage for Hot Reloading execution
-FROM base AS dev
-WORKDIR /usr/src/app
-# We don't copy package.json here because the docker-compose maps volumes. 
-# We just need the command to run 'npm run dev' inside the monorepo map.
-EXPOSE 5173
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+WORKDIR /app
 
-# Build stage for CI/CD or Prod
-FROM base AS builder
-WORKDIR /usr/src/app
-COPY package*.json ./
-COPY apps/frontend/package.json apps/frontend/
-COPY packages/shared/package.json packages/shared/
+# Copy root workspace files
+COPY package.json package-lock.json ./
+# Copy workspace packages package.json
+COPY apps/frontend/package.json ./apps/frontend/
+COPY packages/shared/package.json ./packages/shared/
+
+# Install dependencies
 RUN npm install
-COPY . .
-# We build shared + frontend
-RUN cd packages/shared && npm run build
-RUN cd apps/frontend && npm run build
 
-# Prod Stage
+# Copy source code
+COPY . .
+
+# Build shared package first
+WORKDIR /app/packages/shared
+RUN npm run build
+
+# Build frontend SPA
+WORKDIR /app/apps/frontend
+RUN npm run build
+
+# ─── Stage 2: Production Nginx ─────────────────────────────────
 FROM nginx:alpine AS production
-COPY --from=builder /usr/src/app/apps/frontend/dist /usr/share/nginx/html
+
+# Copy built assets
+COPY --from=builder /app/apps/frontend/dist /usr/share/nginx/html
+
+# Expose standard port
 EXPOSE 80
+
 CMD ["nginx", "-g", "daemon off;"]

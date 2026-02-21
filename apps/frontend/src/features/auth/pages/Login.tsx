@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { api } from '@/lib/api';
 import { useAuthStore } from '@/stores/authStore';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { LoginDto } from '@nfse/shared';
+import type { LoginDto } from '@nfse/shared';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';

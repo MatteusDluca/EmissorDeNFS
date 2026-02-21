@@ -131,32 +131,18 @@ services:
     networks:
       - nfse-network
 
-  # ─── Frontend (React / Vite) ─────────────────────────────────
-  frontend:
+  # ─── Frontend + Nginx Reverse Proxy ──────────────────────────
+  nginx:
     build:
       context: .
       dockerfile: ./apps/frontend/Dockerfile
-      target: dev
-    container_name: nfse-frontend
-    restart: unless-stopped
-    ports:
-      - '5173:5173'
-    volumes:
-      - ./apps/frontend:/usr/src/app/apps/frontend
-      - ./packages/shared:/usr/src/app/packages/shared
-    networks:
-      - nfse-network
-
-  # ─── Nginx Reverse Proxy ─────────────────────────────────────
-  nginx:
-    image: nginx:alpine
+      target: production
     container_name: nfse-nginx
     restart: unless-stopped
     ports:
       - '80:80'
     volumes:
       - ./infra/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./apps/frontend/dist:/usr/share/nginx/html:ro
     depends_on:
       api:
         condition: service_healthy

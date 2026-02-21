@@ -2,6 +2,7 @@ import {
     BadRequestException,
     Body,
     Controller,
+    Get,
     HttpCode,
     HttpStatus,
     Logger,
@@ -23,6 +24,12 @@ export class CertificatesController {
     private readonly logger = new Logger(CertificatesController.name);
 
     constructor(private readonly certificatesService: CertificatesService) { }
+
+    @Get()
+    async findAll(@Request() req: { user: { id: string; username: string } }) {
+        this.logger.log(`Listando certificados para usuário: ${req.user.username}`);
+        return this.certificatesService.findAllByUserId(req.user.id);
+    }
 
     @Post('upload')
     @HttpCode(HttpStatus.CREATED)

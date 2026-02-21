@@ -51,8 +51,9 @@ export class CertificatesService {
             this.logger.debug(`Diretório de certificados criado: ${certDir}`);
         }
 
-        // Salvar arquivo no disco: ./certs/{userId}.pfx
-        const filePath = path.join(certDir, `${userId}.pfx`);
+        // Salvar arquivo no disco com timestamp pra suportar múltiplos
+        const uniqueFileName = `${userId}-${Date.now()}.pfx`;
+        const filePath = path.join(certDir, uniqueFileName);
         fs.writeFileSync(filePath, file.buffer);
         this.logger.log(`Certificado salvo em: ${filePath}`);
 
@@ -60,17 +61,7 @@ export class CertificatesService {
         const encryptedData = encrypt(password, this.certSecret);
         this.logger.debug('Senha do certificado criptografada com sucesso');
 
-        // Remover certificado anterior se existir
-        const existing = await this.prisma.certificate.findFirst({
-            where: { userId },
-        });
-
-        if (existing) {
-            await this.prisma.certificate.delete({ where: { id: existing.id } });
-            this.logger.log(`Certificado anterior removido: ${existing.id}`);
-        }
-
-        // Salvar no banco
+        // Salvar no banco (Não deletamos mais o antigo para permitir N certificados)
         const certificate = await this.prisma.certificate.create({
             data: {
                 userId,
@@ -91,13 +82,14 @@ export class CertificatesService {
     }
 
     /**
-     * Busca certificado do usuário e descriptografa a senha
+     * Busca certificado do usuário e descriptografa a senha (Usa sempre o mais recente)
      */
     async getCertificateWithPassword(
         userId: string,
     ): Promise<{ filePath: string; password: string }> {
         const certificate = await this.prisma.certificate.findFirst({
             where: { userId },
+            orderBy: { createdAt: 'desc' },
         });
 
         if (!certificate) {
@@ -128,6 +120,25 @@ export class CertificatesService {
             filePath: certificate.filePath,
             password,
         };
+    }
+
+    /**
+     * Recupera todos os certificados listados deste usuário
+     */
+    async findAllByUserId(userId: string) {
+        const certs = await this.prisma.certificate.findMany({
+            where: { userId },
+            orderBy: { createdAt: 'desc' },
+        });
+
+        return certs.map(c => ({
+            id: c.id,
+            createdAt: c.createdAt,
+            // Apenas para display na UI
+            fileName: path.basename(c.filePath),
+            // Indicar se é o mais recente pra worker:
+            isLatest: certs[0].id === c.id
+        }));
     }
 
     /**

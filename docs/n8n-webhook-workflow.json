@@ -1,0 +1,66 @@
+{
+    "name": "NFS-e Emissor - Webhook Receiver",
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "nfse-emissor-webhook",
+                "options": {}
+            },
+            "name": "Recebe Webhook NFSe",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                250,
+                300
+            ],
+            "webhookId": "nfse-mock-receiver-1234"
+        },
+        {
+            "parameters": {
+                "chatId": "",
+                "text": "=🚀 *Nova NFSe Emitida com Sucesso!*\n\n*Protocolo:* {{$json.body.protocol}}\n*Venda ID:* {{$json.body.saleId}}\n*Status:* {{$json.body.status}}\n\nMensagem enviada diretamente pelo painel do N8n!",
+                "additionalFields": {
+                    "parse_mode": "Markdown"
+                }
+            },
+            "name": "Notifica Telegram",
+            "type": "n8n-nodes-base.telegram",
+            "typeVersion": 1,
+            "position": [
+                500,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "content": "A NFSe foi processada no sistema interno e a prefeitura nos retornou com o protocolo gerado na SEFAZ Mock.",
+                "options": {}
+            },
+            "id": "1d8ae625-f374-4b47-b371-3bfb7d15a995",
+            "name": "Sticky Note",
+            "type": "n8n-nodes-base.stickyNote",
+            "typeVersion": 1,
+            "position": [
+                200,
+                150
+            ]
+        }
+    ],
+    "connections": {
+        "Recebe Webhook NFSe": {
+            "main": [
+                [
+                    {
+                        "node": "Notifica Telegram",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "active": false,
+    "settings": {},
+    "versionId": "f045cf70-cfb7-4c7b-bba7-14ba73b4e3af"
+}

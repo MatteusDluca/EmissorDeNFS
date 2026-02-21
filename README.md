@@ -47,7 +47,15 @@ Sistema de emissão de NFS-e com processamento assíncrono via filas, integraç�
 | **Segurança** | AES-256-GCM, JWT, bcrypt |
 | **Testes** | Jest, Supertest, Vitest, MSW, React Testing Library |
 
-## 🚀 Como Rodar
+## 🎥 Entrega e Avaliação (Plano B)
+
+Devido às limitações impostas pelos *Free Tiers* atuais das plataformas de nuvem, que frequentemente congelam ("spin down") instâncias de Backends e não oferecem Workers assíncronos que rodem 24/7 de forma gratuita sem registro de cartão de crédito, optei pelo **Plano B** como método final de entrega na avaliação.
+
+Junto com este repositório, você encontrará (ou receberá via link) um vídeo rápido de demonstração da aplicação subindo totalmente `containerizada` usando o Docker e navegando pelo Dashboard para comprovar que todo o fluxo assíncrono entre Venda, Fila, Worker e Prefeitura Mock opera 100% conforme os requisitos de negócio e resiliência (com direito a falhas, sucessos e idempotência).
+
+---
+
+## 🚀 Como Rodar Localmente
 
 ### Pré-requisitos
 - Docker e Docker Compose instalados

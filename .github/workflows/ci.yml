@@ -1,0 +1,32 @@
+name: NFS-e CI Pipeline
+
+on:
+  push:
+    branches: [ "master", "main" ]
+  pull_request:
+    branches: [ "master", "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js 20.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm install
+      
+    - name: Lint workspace
+      run: npm run lint --if-present
+      
+    - name: Build applications
+      run: npm run build
+      
+    - name: Run Unit Tests
+      run: npm test

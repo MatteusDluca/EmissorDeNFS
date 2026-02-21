@@ -53,3 +53,19 @@ export interface NoteJobData {
     userId: string;
     externalId: string;
 }
+
+// ─── Certificate Response DTO ──────────────────────────────────
+export interface CertificateResponseDto {
+    id: string;
+    fileName: string;
+    isLatest: boolean;
+    createdAt: string;
+}
+
+// ─── KPI Response DTO ──────────────────────────────────────────
+export interface KpiResponseDto {
+    totalAmount: number;
+    totalSuccess: number;
+    totalFailed: number;
+    totalProcessing: number;
+}

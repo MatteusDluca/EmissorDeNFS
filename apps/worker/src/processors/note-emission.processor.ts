@@ -181,18 +181,6 @@ export class NoteEmissionProcessor extends WorkerHost {
                     `[Job ${job.id}] ❌ Erro na emissão: ${errorMessage}`,
                 );
 
-                // Disparar webhook de erro
-                await this.sendWebhook({
-                    event: 'NOTE_FAILED',
-                    noteId: existingNote?.id || '',
-                    saleId,
-                    externalId,
-                    status: 'ERROR',
-                    protocol: null,
-                    errorMessage,
-                    timestamp: new Date().toISOString(),
-                });
-
                 // Lançar erro para BullMQ fazer retry
                 throw new Error(`Emissão falhou: ${errorMessage}`);
             }

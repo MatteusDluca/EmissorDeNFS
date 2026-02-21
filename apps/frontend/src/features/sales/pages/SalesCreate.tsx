@@ -7,7 +7,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import type { CreateSaleDto } from '@nfse/shared';
 import { FileText, Send } from 'lucide-react';
 import { useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import type { SubmitHandler } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -28,7 +29,7 @@ export function SalesCreate() {
     const [isLoading, setIsLoading] = useState(false);
 
     const { register, handleSubmit, formState: { errors } } = useForm<SaleFormValues>({
-        resolver: zodResolver(saleSchema),
+        resolver: zodResolver(saleSchema) as any,
         defaultValues: {
             externalId: `venda-${Math.floor(Math.random() * 10000)}`,
             amount: 1500.00
@@ -38,7 +39,10 @@ export function SalesCreate() {
     const onSubmit: SubmitHandler<SaleFormValues> = async (data) => {
         try {
             setIsLoading(true);
-            const payload: CreateSaleDto = data;
+            const payload: CreateSaleDto = {
+                ...data,
+                tomakerDocument: data.tomakerDocument.replace(/\D/g, '')
+            };
 
             const response = await api.post('/sales', payload);
 
