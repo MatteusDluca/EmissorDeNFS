@@ -5,7 +5,7 @@ import tsParser from '@typescript-eslint/parser';
 export default [
     js.configs.recommended,
     {
-        files: ['**/*.ts'],
+        files: ['**/*.ts', '**/*.js'],
         languageOptions: {
             parser: tsParser,
             parserOptions: {
@@ -25,6 +25,19 @@ export default [
                 clearTimeout: 'readonly',
                 setInterval: 'readonly',
                 clearInterval: 'readonly',
+                jest: 'readonly',
+                describe: 'readonly',
+                it: 'readonly',
+                expect: 'readonly',
+                beforeEach: 'readonly',
+                afterEach: 'readonly',
+                beforeAll: 'readonly',
+                afterAll: 'readonly',
+                Express: 'readonly',
+                window: 'readonly',
+                localStorage: 'readonly',
+                global: 'readonly',
+                Event: 'readonly'
             },
         },
         plugins: {
