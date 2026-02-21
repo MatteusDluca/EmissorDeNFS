@@ -14,7 +14,7 @@ Sistema de emissão de NFS-e com processamento assíncrono via filas, integraç�
 
 ```
 ┌─────────┐     ┌───────┐     ┌──────────┐     ┌───────────────────┐
-│ Cliente  │────▶│ Nginx │────▶│ API NestJS│────▶│ PostgreSQL + Redis│
+│ React UI│────▶│ Nginx │────▶│ API NestJS│────▶│ PostgreSQL + Redis│
 └─────────┘     └───────┘     └──────────┘     └───────────────────┘
                                     │                     │
                                     ▼                     │
@@ -37,6 +37,7 @@ Sistema de emissão de NFS-e com processamento assíncrono via filas, integraç�
 
 | Camada | Tecnologia |
 |--------|-----------|
+| **Frontend** | Vite + React 19 + Tailwind CSS v4 + Shadcn/ui |
 | **API** | NestJS 10 (TypeScript strict) |
 | **Worker** | NestJS headless + BullMQ |
 | **Banco** | PostgreSQL 16 + Prisma ORM |
@@ -44,7 +45,7 @@ Sistema de emissão de NFS-e com processamento assíncrono via filas, integraç�
 | **Proxy** | Nginx |
 | **Mock** | Express.js |
 | **Segurança** | AES-256-GCM, JWT, bcrypt |
-| **Testes** | Jest, Supertest |
+| **Testes** | Jest, Supertest, Vitest, MSW, React Testing Library |
 
 ## 🚀 Como Rodar
 
