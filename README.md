@@ -1,4 +1,4 @@
-# 📝 NFS-e Emissor Simplificado
+# NFS-e Emissor Simplificado
 
 [![CI Pipeline](https://github.com/MatteusDluca/EmissorDeNFS/actions/workflows/ci.yml/badge.svg)](https://github.com/MatteusDluca/EmissorDeNFS/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -11,25 +11,28 @@
 
 ---
 
-## 📋 Índice
+## Índice
 
-- [Arquitetura](#-arquitetura)
-- [Stack Tecnológica](#-stack-tecnológica)
-- [Como Rodar](#-como-rodar-localmente)
-- [Endpoints da API](#-endpoints-da-api)
-- [Fluxo de Emissão](#-fluxo-de-emissão-de-nfs-e)
-- [Frontend e Dashboard](#-frontend-e-dashboard)
-- [Segurança](#-segurança)
-- [Testes Automatizados](#-testes-automatizados)
-- [Integração N8n + Telegram (Bônus)](#-integração-webhook--n8n--telegram-bônus)
-- [Estrutura do Projeto](#-estrutura-do-projeto)
-- [Trade-offs e Decisões Técnicas](#-trade-offs-e-decisões-técnicas)
-- [Demonstração em Vídeo](#-demonstração-em-vídeo)
-- [Contato](#-contato)
+- [Arquitetura](#arquitetura)
+- [Stack Tecnológica](#stack-tecnológica)
+- [Como Rodar Localmente](#como-rodar-localmente)
+- [Variáveis de Ambiente](#variáveis-de-ambiente)
+- [Endpoints da API](#endpoints-da-api)
+- [Fluxo de Emissão de NFS-e](#fluxo-de-emissão-de-nfs-e)
+- [Frontend e Dashboard](#frontend-e-dashboard)
+- [Segurança](#segurança)
+- [Testes Automatizados](#testes-automatizados)
+- [Integração Webhook + N8n + Telegram (Bônus)](#integração-webhook--n8n--telegram-bônus)
+- [Estrutura do Projeto](#estrutura-do-projeto)
+- [Trade-offs e Decisões Técnicas](#trade-offs-e-decisões-técnicas)
+- [Uso de IA e Ferramentas](#uso-de-ia-e-ferramentas)
+- [Limitações Conhecidas](#limitações-conhecidas)
+- [Demonstração em Vídeo (Plano B)](#demonstração-em-vídeo-plano-b)
+- [Contato](#contato)
 
 ---
 
-## 🏗️ Arquitetura
+## Arquitetura
 
 O sistema segue uma arquitetura de **microsserviços**, onde cada componente tem responsabilidade única e se comunica via filas (BullMQ) e HTTP:
 
@@ -62,7 +65,7 @@ O sistema segue uma arquitetura de **microsserviços**, onde cada componente tem
 
 ---
 
-## 🛠️ Stack Tecnológica
+## Stack Tecnológica
 
 | Camada | Tecnologia | Justificativa |
 |--------|-----------|---------------|
@@ -73,13 +76,13 @@ O sistema segue uma arquitetura de **microsserviços**, onde cada componente tem
 | **Fila** | Redis 7 + BullMQ | Retry nativo, backoff exponencial, job deduplication |
 | **Proxy** | Nginx (Alpine) | Reverse proxy unificando frontend + API na porta 80 |
 | **Mock** | Express.js | Simula resposta da prefeitura (70% sucesso / 30% erro) |
-| **Segurança** | AES-256-GCM · JWT · bcrypt | Criptografia autenticada + tokens + hash de senhas |
-| **Testes** | Jest · Vitest · MSW · React Testing Library | Backend + Frontend com 23 testes automatizados |
+| **Segurança** | AES-256-GCM, JWT, bcrypt | Criptografia autenticada + tokens + hash de senhas |
+| **Testes** | Jest, Vitest, MSW, React Testing Library | Backend + Frontend com 23 testes automatizados |
 | **CI/CD** | GitHub Actions | Pipeline automática: Lint → Build → Test |
 
 ---
 
-## 🚀 Como Rodar Localmente
+## Como Rodar Localmente
 
 ### Pré-requisitos
 - [Docker](https://www.docker.com/) e Docker Compose instalados
@@ -108,13 +111,29 @@ docker compose exec api npx prisma db seed
 |---------|-----|
 | **Aplicação (Frontend + API)** | `http://localhost` |
 | **API direta** | `http://localhost:3000` |
-| **Prefeitura Mock** | `http://localhost:4000` |
 
-> **Credenciais padrão:** `admin` / `admin` (definidas no seed)
+**Credenciais padrão:** `admin` / `admin` (definidas no seed)
 
 ---
 
-## 📡 Endpoints da API
+## Variáveis de Ambiente
+
+O arquivo `.env.example` lista todas as variáveis necessárias. Antes de rodar, copie para `.env` e preencha as marcações `<YOUR_...>`.
+
+| Variável | Descrição | Exemplo / Padrão |
+|----------|-----------|------------------|
+| `POSTGRES_PASSWORD` | Senha do banco de dados | `minha_senha_forte` |
+| `JWT_SECRET` | Chave secreta para assinatura dos tokens JWT | `secret_super_seguro` |
+| `CERT_SECRET` | Chave AES (32 chars) para criptografar senha do .pfx | `01234567890123456789012345678901` |
+| `ADMIN_PASSWORD` | Senha do usuário seed `admin` | `admin` |
+| `WEBHOOK_URL` | Endpoint que receberá o POST em caso de sucesso | `http://host.docker.internal:5678/webhook` |
+| `WORKER_CONCURRENCY` | Quantidade de notas processadas em paralelo | `3` |
+
+> **Prática de Segurança:** Segredos reais nunca são commitados no repositório. O arquivo `.env.example` serve apenas como catálogo de estrutura.
+
+---
+
+## Endpoints da API
 
 Todos os endpoints (exceto `/auth/login` e `/health`) requerem autenticação via **Bearer Token JWT**.
 
@@ -123,20 +142,20 @@ Todos os endpoints (exceto `/auth/login` e `/health`) requerem autenticação vi
 |--------|------|-----------|----------|
 | `POST` | `/auth/login` | Login com username/password | `{ accessToken: "jwt..." }` |
 
-### Certificados Digitais (🔒)
+### Certificados Digitais (Auth)
 | Método | Rota | Descrição | Resposta |
 |--------|------|-----------|----------|
 | `GET` | `/certificates` | Lista certificados do usuário | `[{ id, fileName, isLatest }]` |
 | `POST` | `/certificates/upload` | Upload de .pfx (multipart/form-data) | `{ id, message }` |
 
-### Vendas (🔒)
+### Vendas (Auth)
 | Método | Rota | Descrição | Resposta |
 |--------|------|-----------|----------|
 | `POST` | `/sales` | Criar venda → enfileira emissão | `202 Accepted` |
 | `GET` | `/sales` | Listar vendas do usuário | `[{ id, externalId, status, ... }]` |
 | `GET` | `/sales/:id` | Detalhe de uma venda | `{ id, externalId, amount, ... }` |
 
-### Notas Fiscais (🔒)
+### Notas Fiscais (Auth)
 | Método | Rota | Descrição | Resposta |
 |--------|------|-----------|----------|
 | `GET` | `/notes` | Listar notas (filtro `?status=`) | `{ total, notes: [...] }` |
@@ -151,7 +170,7 @@ Todos os endpoints (exceto `/auth/login` e `/health`) requerem autenticação vi
 
 ---
 
-## 🔄 Fluxo de Emissão de NFS-e
+## Fluxo de Emissão de NFS-e
 
 ```
 1. POST /sales         → Cria registro de Venda + NoteEmission
@@ -173,7 +192,7 @@ Todos os endpoints (exceto `/auth/login` e `/health`) requerem autenticação vi
 
 ---
 
-## 📊 Frontend e Dashboard
+## Frontend e Dashboard
 
 O frontend é uma **SPA (Single Page Application)** construída com React 19 + Vite, utilizando componentes do Shadcn/ui com tema dark nativo.
 
@@ -187,10 +206,10 @@ O frontend é uma **SPA (Single Page Application)** construída com React 19 + V
 | **Certificados** | Upload de .pfx com drag & drop e listagem do cofre |
 
 ### KPIs do Dashboard
-- 💰 **Volume Transacionado** — soma dos valores das notas emitidas
-- ✅ **Faturas Emitidas** — contagem de notas com status SUCCESS
-- ⏳ **Em Processamento** — contagem de notas na fila
-- ❌ **Falhas de Emissão** — contagem de notas com status ERROR
+- **Volume Transacionado** — soma dos valores das notas emitidas
+- **Faturas Emitidas** — contagem de notas com status SUCCESS
+- **Em Processamento** — contagem de notas na fila
+- **Falhas de Emissão** — contagem de notas com status ERROR
 
 ### Funcionalidades Extras
 - **Polling automático (3s):** Atualização da tabela enquanto houver notas processando
@@ -200,20 +219,23 @@ O frontend é uma **SPA (Single Page Application)** construída com React 19 + V
 
 ---
 
-## 🔐 Segurança
+## Segurança
+
+Atendendo às diretrizes da **OWASP** para manuseio de segredos e certificados:
 
 | Camada | Implementação |
 |--------|--------------|
 | **Autenticação** | JWT (Bearer token) com expiração configurável |
 | **Senhas de usuário** | Hashing com `bcrypt` (salt rounds automáticos) |
-| **Senha do certificado** | Criptografia `AES-256-GCM` com IV aleatório + Auth Tag |
-| **Certificados .pfx** | Armazenados no disco, nunca em banco; senha nunca em plaintext |
+| **Senha do certificado** | Criptografia `AES-256-GCM` com IV aleatório + Auth Tag. Conforme o edital destaca, guardar em *plaintext* ou *base64* é vulnerabilidade. A chave de decriptação (`CERT_SECRET`) vive apenas na variável de ambiente do Worker. |
+| **Certificados .pfx** | Armazenados de forma isolada no volume, nunca em banco de dados |
+| **Segredos no repositório** | Senhas reais, tokens e chaves não são commitados. O `docker-compose.yml` e o `.env.example` usam *placeholders* (`<YOUR_PASSWORD>`) |
 | **Validação de entrada** | `class-validator` em todos os DTOs |
-| **Guards** | `JwtAuthGuard` protege todas as rotas exceto `/auth/login` e `/health` |
+| **Guards** | `JwtAuthGuard` protege todas as rotas de negócio |
 
 ---
 
-## 🧪 Testes Automatizados
+## Testes Automatizados
 
 O projeto possui **23 testes automatizados** distribuídos entre backend e frontend:
 
@@ -243,7 +265,7 @@ npm test --workspace=frontend      # 8 testes  (1 suite)
 
 ---
 
-## 🔔 Integração Webhook + N8n + Telegram (Bônus)
+## Integração Webhook + N8n + Telegram (Bônus)
 
 Como **diferencial extra**, o sistema pode ser integrado com o **N8n** (automação) para enviar notificações via **Telegram** quando uma NFS-e é emitida com sucesso.
 
@@ -257,7 +279,7 @@ Como **diferencial extra**, o sistema pode ser integrado com o **N8n** (automaç
 
 ---
 
-## 📁 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 nfs-e-emissor/
@@ -298,7 +320,7 @@ nfs-e-emissor/
 
 ---
 
-## 📦 Trade-offs e Decisões Técnicas
+## Trade-offs e Decisões Técnicas
 
 | Decisão | Justificativa |
 |---------|---------------|
@@ -315,36 +337,57 @@ nfs-e-emissor/
 
 ---
 
-## 🎥 Demonstração em Vídeo
+## Uso de IA e Ferramentas
 
-> 📹 **[Link do vídeo de demonstração em breve]**
+Ferramentas de IA generativa foram usadas como **pair programmer** durante o desenvolvimento, conforme permitido pelo desafio. Saber conduzir a IA faz parte do skillset de um dev moderno — o ganho está na velocidade sem perder o controle técnico.
 
-O vídeo demonstra o fluxo completo:
-1. Login na aplicação
-2. Upload de certificado digital .pfx
-3. Cadastro de nova venda
-4. Processamento assíncrono pelo Worker
-5. Atualização automática do Dashboard (polling)
-6. KPIs em tempo real
-7. Retry manual de nota com erro
-8. Notificação via Telegram (integração N8n)
+**O que a IA ajudou a acelerar:**
+- Scaffolding de componentes React com Shadcn/ui e Tailwind
+- Boilerplate de tipagens TypeScript, DTOs e configurações repetitivas
+- Redação inicial de suítes de teste e mocks do MSW
 
----
-
-## 🎥 Entrega e Avaliação
-
-Devido às limitações dos *Free Tiers* atuais de plataformas de nuvem — que congelam instâncias e não oferecem Workers assíncronos 24/7 sem cartão de crédito — a entrega é feita via **demonstração local containerizada** com Docker.
-
-O projeto sobe 100% com um único comando (`docker compose up --build`) e opera todos os fluxos de negócio conforme os requisitos: emissão assíncrona, retry, idempotência e webhook.
+**O que foi pensado e decidido por mim:**
+- Arquitetura completa (API + Worker headless + Fila + Mock como serviço separado)
+- Estratégia de criptografia do certificado A1 (AES-256-GCM, não base64)
+- Design de idempotência (externalId + jobId BullMQ)
+- Retry com backoff exponencial e retry manual via Dashboard
+- Pipeline de CI (GitHub Actions) e resolução de todos os problemas de integração
 
 ---
 
-## 👤 Contato
+## Limitações Conhecidas
+
+**Deploy em Nuvem:** Os free tiers atuais de plataformas PaaS (Render, Railway, Fly.io) não suportam a execução simultânea de API + Worker + PostgreSQL + Redis sem cartão de crédito ou hibernação forçada das instâncias. O projeto foi entregue via Plano B (Docker local + vídeo demo).
+
+**Assinatura Digital Simplificada:** O XML enviado à Prefeitura Mock usa uma assinatura simulada. Em produção real, seria substituído por `xml-crypto` ou `node-forge` com certificado A1 válido.
+
+**Desafios resolvidos durante o desenvolvimento:**
+- 3 testes do Frontend falhavam porque as URLs do MSW não batiam com a baseURL real do Axios — a investigação revelou a discrepância entre `http://localhost/api/` e `http://localhost:3000/`, resolvida com uma única correção cirúrgica
+- Teste de certificados esperava que o sistema deletasse certificados antigos, mas a regra de negócio evoluiu para manter histórico — o teste foi atualizado para refletir o comportamento correto
+
+---
+
+## Demonstração em Vídeo (Plano B)
+
+> **[Link do vídeo de demonstração em breve]**
+
+Devido às limitações dos free tiers de plataformas cloud, a entrega foi feita via **vídeo de demonstração com containerização local (Plano B)**, cumprindo o roteiro exigido no edital:
+
+1. `docker compose up` subindo os 6 serviços do zero
+2. Login na aplicação com usuário *seed*
+3. Upload de certificado digital .pfx
+4. Criação de uma *Sale* (Venda) pelo formulário
+5. Status mudando na lista (PROCESSING → SUCCESS / ERROR)
+6. (Bônus) Notificação de sucesso via Telegram com integração N8n
+
+---
+
+## Contato
 
 **Matteus Dluca**
 
-- 🐙 GitHub: [@MatteusDluca](https://github.com/MatteusDluca)
+- GitHub: [@MatteusDluca](https://github.com/MatteusDluca)
 
 ---
 
-**Status:** ✅ Completo | **Licença:** MIT | **Testes:** 23/23 passando
+**Status:** Completo | **Licença:** MIT | **Testes:** 23/23 passando

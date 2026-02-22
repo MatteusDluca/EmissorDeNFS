@@ -105,10 +105,10 @@ services:
     container_name: nfse-worker
     restart: unless-stopped
     environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER:-nfse_user}:${POSTGRES_PASSWORD:-nfse_pass}@postgres:5432/${POSTGRES_DB:-nfse_db}?schema=public
+      DATABASE_URL: postgresql://${POSTGRES_USER:-nfse_user}:${POSTGRES_PASSWORD:-postgres_password}@postgres:5432/${POSTGRES_DB:-nfse_db}?schema=public
       REDIS_HOST: redis
       REDIS_PORT: 6379
-      CERT_SECRET: ${CERT_SECRET:-your-aes-256-key-must-be-32-chars!!}
+      CERT_SECRET: ${CERT_SECRET:-your-cert-key-prod-only}
       PREFEITURA_MOCK_URL: http://prefeitura-mock:4000/nfse
       WEBHOOK_URL: ${WEBHOOK_URL:-}
       WEBHOOK_TIMEOUT_MS: ${WEBHOOK_TIMEOUT_MS:-5000}
