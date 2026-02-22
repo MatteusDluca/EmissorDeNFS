@@ -98,11 +98,8 @@ cd EmissorDeNFS
 # 2. Copie as variáveis de ambiente e preencha as senhas
 cp .env.example .env
 
-# 3. Suba todos os serviços (build + start)
+# 3. Suba todos os serviços (build + start + seed automático)
 docker compose up --build -d
-
-# 4. (Primeiro uso) Execute o seed do admin
-docker compose exec api npx prisma db seed
 ```
 
 ### Acessando a aplicação
@@ -275,8 +272,6 @@ Como **diferencial extra**, o sistema pode ser integrado com o **N8n** (automaç
 3. Quando o Worker processa uma nota com sucesso, ele dispara um POST na URL configurada
 4. O N8n recebe o payload e envia a notificação formatada para o Telegram
 
-> O arquivo `docs/n8n-webhook-workflow.json` contém o workflow pronto para importação.
-
 ---
 
 ## Estrutura do Projeto
@@ -312,8 +307,6 @@ nfs-e-emissor/
 │   └── shared/                # DTOs, interfaces, enums, crypto utils
 ├── infra/
 │   └── nginx/                 # Configuração do reverse proxy
-├── docs/
-│   └── n8n-webhook-workflow.json  # Workflow N8n importável
 ├── docker-compose.yml         # Orquestração de 6 containers
 └── .env.example               # Template de variáveis de ambiente
 ```
