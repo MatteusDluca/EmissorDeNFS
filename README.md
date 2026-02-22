@@ -266,11 +266,32 @@ npm test --workspace=frontend      # 8 testes  (1 suite)
 
 Como **diferencial extra**, o sistema pode ser integrado com o **N8n** (automação) para enviar notificações via **Telegram** quando uma NFS-e é emitida com sucesso.
 
-### Como Funciona
-1. Configure a variável `WEBHOOK_URL` no `.env` para apontar para seu workflow N8n
-2. No N8n, crie um workflow com nó `Webhook` → `Telegram`
-3. Quando o Worker processa uma nota com sucesso, ele dispara um POST na URL configurada
-4. O N8n recebe o payload e envia a notificação formatada para o Telegram
+### Como Rodar o N8n Localmente para Testar
+
+Você pode usar o arquivo `docs/n8n-webhook-workflow.json` incluído neste repositório para replicar a integração localmente.
+
+1. Inicie um container do N8n na sua máquina:
+   ```bash
+   docker run -d --name n8n -p 5678:5678 -v n8n_data:/home/node/.n8n n8nio/n8n
+   ```
+2. Acesse `http://localhost:5678` no navegador e conclua a configuração inicial.
+3. No N8n, vá em **Workflows > Import from File** e selecione o arquivo `docs/n8n-webhook-workflow.json` deste repositório.
+4. O workflow terá dois nós: um **Webhook** e um **Telegram**.
+   - **Telegram:** Forneça as credenciais (Bot Token obtido via [@BotFather](https://t.me/BotFather) no Telegram) e o ID do chat (`chat_id`) para onde enviar as mensagens.
+   - **Webhook:** Copie a "Test URL" gerada pelo nó de Webhook.
+5. Edite o arquivo `.env` do NFS-e Emissor, colando a URL do webhook copiada:
+   ```env
+   WEBHOOK_URL=http://host.docker.internal:5678/webhook-test/seu-id
+   ```
+   *(Nota: O uso do `host.docker.internal` permite que o container do Worker acesse o container do N8n hospedado na porta 5678).*
+6. Reinicie os containers do projeto (`docker compose restart worker`).
+
+### Como Foi Testado e Validado
+
+1. **Trigger de Sucesso:** No frontend do emissor, validamos a criação de uma Venda que foi bem-sucedida (Status `SUCCESS`).
+2. **Worker HTTP POST:** Verificamos nos logs do Worker que o serviço de webhook foi acionado, disparando um payload POST com os headers corretos para a URL do N8n.
+3. **Recebimento N8n:** Com o workflow em modo de "Execução de Teste" (Listening), validamos que o N8n capturou com sucesso o Payload JSON contendo dados como `saleId`, `protocol`, `externalId` e `status`.
+4. **Alerta Telegram:** O N8n executou o fluxo com sucesso, formatando e entregando instantaneamente uma mensagem de aprovação de emissão de NF no Telegram configurado.
 
 ---
 
@@ -307,6 +328,8 @@ nfs-e-emissor/
 │   └── shared/                # DTOs, interfaces, enums, crypto utils
 ├── infra/
 │   └── nginx/                 # Configuração do reverse proxy
+├── docs/
+│   └── n8n-webhook-workflow.json  # Workflow N8n importável
 ├── docker-compose.yml         # Orquestração de 6 containers
 └── .env.example               # Template de variáveis de ambiente
 ```
