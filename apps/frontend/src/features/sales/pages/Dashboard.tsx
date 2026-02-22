@@ -149,7 +149,7 @@ export function Dashboard() {
                             <Button
                                 variant={statusFilter === 'SUCCESS' ? 'default' : 'secondary'}
                                 size="sm"
-                                className="h-7 text-xs bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20"
+                                className={`h-7 text-xs ${statusFilter !== 'SUCCESS' ? 'bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20' : ''}`}
                                 onClick={() => setStatusFilter('SUCCESS')}
                             >
                                 Sucesso
@@ -157,7 +157,7 @@ export function Dashboard() {
                             <Button
                                 variant={statusFilter === 'ERROR' ? 'default' : 'secondary'}
                                 size="sm"
-                                className="h-7 text-xs bg-red-500/10 text-red-500 hover:bg-red-500/20"
+                                className={`h-7 text-xs ${statusFilter !== 'ERROR' ? 'bg-red-500/10 text-red-500 hover:bg-red-500/20' : ''}`}
                                 onClick={() => setStatusFilter('ERROR')}
                             >
                                 Falhas
