@@ -109,7 +109,7 @@ docker compose up --build -d
 | **Aplicação (Frontend + API)** | `http://localhost` |
 | **API direta** | `http://localhost:3000` |
 
-**Credenciais padrão:** `admin` / `admin` (definidas no seed)
+**Credenciais padrão:** `admin` / `admin123` (definidas no seed)
 
 ---
 
@@ -122,7 +122,7 @@ O arquivo `.env.example` lista todas as variáveis necessárias. Antes de rodar,
 | `POSTGRES_PASSWORD` | Senha do banco de dados | `minha_senha_forte` |
 | `JWT_SECRET` | Chave secreta para assinatura dos tokens JWT | `secret_super_seguro` |
 | `CERT_SECRET` | Chave AES (32 chars) para criptografar senha do .pfx | `01234567890123456789012345678901` |
-| `ADMIN_PASSWORD` | Senha do usuário seed `admin` | `admin` |
+| `ADMIN_PASSWORD` | Senha do usuário seed `admin` | `admin123` |
 | `WEBHOOK_URL` | Endpoint que receberá o POST em caso de sucesso | `http://host.docker.internal:5678/webhook` |
 | `WORKER_CONCURRENCY` | Quantidade de notas processadas em paralelo | `3` |
 
