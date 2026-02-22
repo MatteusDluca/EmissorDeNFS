@@ -27,7 +27,7 @@
 - [Trade-offs e Decisões Técnicas](#trade-offs-e-decisões-técnicas)
 - [Uso de IA e Ferramentas](#uso-de-ia-e-ferramentas)
 - [Limitações Conhecidas](#limitações-conhecidas)
-- [Demonstração e Acesso Temporário](#demonstração-e-acesso-temporário)
+- [Demonstração, Acesso Temporário e Vídeo](#demonstração-acesso-temporário-e-vídeo)
 - [Contato](#contato)
 
 ---
@@ -383,14 +383,20 @@ Ferramentas de IA generativa foram usadas como **pair programmer** durante o des
 
 ---
 
-## Demonstração e Acesso Temporário (via Ngrok)
+## Demonstração, Acesso Temporário e Vídeo
 
-**Por que estamos usando Ngrok?** 
-Devido às pesadas limitações dos *free tiers* de plataformas cloud atuais (como Render, Railway ou Fly.io), não é viável hospedar simultaneamente uma arquitetura completa baseada em microsserviços. O sistema exige a execução paralela de **6 containers** (Nginx, API, Worker Headless, PostgreSQL, Redis e a Prefeitura Mock). Tentar hospedar tudo de forma gratuita resultaria em falta de recurso (OOM) ou servidores hibernando a cada requisição.
+> **[Link do vídeo de demonstração em breve]**
 
-Para garantir a melhor avaliação possível, o cenário ideal escolhido foi realizar o **deploy local** na máquina do desenvolvedor e expor a aplicação online através de um túnel reverso seguro utilizando o **Ngrok**.
+**Por que opções alternativas de deploy?**
+Devido às pesadas limitações dos *free tiers* de plataformas cloud atuais (como Render, Railway ou Fly.io), não é viável hospedar simultaneamente uma arquitetura completa baseada em microsserviços. O sistema exige a execução paralela de **6 containers** (Nginx, API, Worker Headless, PostgreSQL, Redis e a Prefeitura Mock). Tentar hospedar tudo de forma gratuita resultaria em falta de recursos (OOM) ou servidores hibernando a cada requisição.
 
-O link público e as credenciais de teste foram encaminhados diretamente via e-mail/mensagem para a equipe de recrutamento.
+Para garantir a melhor avaliação, o cenário escolhido foi realizar o **deploy local** na máquina do desenvolvedor e expor a aplicação online através de um túnel reverso seguro via **Ngrok**, além de gravar a execução em vídeo demonstrativo:
+
+1. `docker compose up` subindo os 6 serviços do zero
+2. Login na aplicação com usuário *seed*
+3. Upload de certificado digital .pfx
+4. Criação de uma *Venda* pelo formulário e fila BullMQ processando
+5. Notificação de sucesso via Telegram (Webhook N8n)
 
 ---
 
