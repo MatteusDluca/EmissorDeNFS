@@ -88,88 +88,91 @@ export function Certificates() {
                 <h1 className="text-3xl font-semibold tracking-tight">Certificado Digital</h1>
                 <p className="text-muted-foreground mt-2">Faça o upload do seu certificado A1 (.pfx) e protegemos a senha em trânsito e em repouso com algoritmo padrão militar.</p>
             </div>
-
-            <Card className="bg-card/40 border-white/5 shadow-xl backdrop-blur-sm">
-                <CardHeader>
-                    <CardTitle className="text-xl flex items-center gap-2">
-                        <FileLock className="w-5 h-5 text-primary" />
-                        Cofre de Assinatura
-                    </CardTitle>
-                    <CardDescription>
-                        Os certificados são armazenados nativamente num cofre offline e criptografados em via tripla GCM.
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                        <fieldset disabled={isLoading} className="space-y-6 group disabled:opacity-80 transition-opacity">
-                            {/* Drag & Drop Area */}
-                            <div className="space-y-2">
-                                <Label className="text-xs font-medium text-muted-foreground uppercase tracking-wider group-disabled:opacity-70">Arquivo do Certificado (.pfx)</Label>
-                                <div
-                                    onDragOver={onDragOver}
-                                    onDragLeave={onDragLeave}
-                                    onDrop={onDrop}
-                                    className={`relative flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-lg transition-colors
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <Card className="max-w-md mx-auto bg-card border-white/[0.04] shadow-sm">
+                    <CardHeader className="space-y-3 text-center border-b border-white/[0.04] pb-6 bg-white/[0.01]">
+                        <div className="w-12 h-12 bg-white/5 rounded-md flex items-center justify-center mx-auto border border-white/10">
+                            <FileLock className="w-6 h-6 text-zinc-300" />
+                        </div>
+                        <div className="space-y-1">
+                            <CardTitle className="text-xl tracking-tight text-white/95">Cofre de Certificados</CardTitle>
+                            <CardDescription className="text-zinc-500 text-sm">
+                                Armazene seu certificado A1 de forma segura
+                            </CardDescription>
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                            <fieldset disabled={isLoading} className="space-y-6 group disabled:opacity-80 transition-opacity">
+                                {/* Drag & Drop Area */}
+                                <div className="space-y-2">
+                                    <Label className="text-xs font-medium text-muted-foreground uppercase tracking-wider group-disabled:opacity-70">Arquivo do Certificado (.pfx)</Label>
+                                    <div
+                                        onDragOver={onDragOver}
+                                        onDragLeave={onDragLeave}
+                                        onDrop={onDrop}
+                                        className={`relative flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-lg transition-colors
                       ${isDragging ? 'border-primary bg-primary/5' : 'border-border/50 bg-background/50 hover:bg-background/80'}
                       ${file ? 'border-primary/50 bg-primary/5' : ''}
                       group-disabled:pointer-events-none
                     `}
-                                >
-                                    <input
-                                        type="file"
-                                        accept=".pfx"
-                                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
-                                        onChange={onFileChange}
-                                        disabled={isLoading}
-                                    />
-                                    <div className="flex flex-col items-center justify-center pt-5 pb-6 text-center pointer-events-none">
-                                        {file ? (
-                                            <>
-                                                <FileLock className="w-10 h-10 text-primary mb-3" />
-                                                <p className="mb-2 text-sm font-medium text-foreground">{file.name}</p>
-                                                <p className="text-xs text-muted-foreground">{(file.size / 1024).toFixed(2)} KB • Clique para trocar</p>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <UploadCloud className="w-10 h-10 text-muted-foreground mb-3" />
-                                                <p className="mb-2 text-sm text-foreground"><span className="font-semibold">Clique para fazer upload</span> ou arraste o arquivo</p>
-                                                <p className="text-xs text-muted-foreground">Apenas arquivos .pfx (PKCS #12)</p>
-                                            </>
-                                        )}
+                                    >
+                                        <input
+                                            type="file"
+                                            accept=".pfx"
+                                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
+                                            onChange={onFileChange}
+                                            disabled={isLoading}
+                                        />
+                                        <div className="flex flex-col items-center justify-center pt-5 pb-6 text-center pointer-events-none">
+                                            {file ? (
+                                                <>
+                                                    <FileLock className="w-10 h-10 text-primary mb-3" />
+                                                    <p className="mb-2 text-sm font-medium text-foreground">{file.name}</p>
+                                                    <p className="text-xs text-muted-foreground">{(file.size / 1024).toFixed(2)} KB • Clique para trocar</p>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <UploadCloud className="w-10 h-10 text-muted-foreground mb-3" />
+                                                    <p className="mb-2 text-sm text-foreground"><span className="font-semibold">Clique para fazer upload</span> ou arraste o arquivo</p>
+                                                    <p className="text-xs text-muted-foreground">Apenas arquivos .pfx (PKCS #12)</p>
+                                                </>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            {/* Password Field */}
-                            <div className="space-y-2">
-                                <Label htmlFor="certPassword" className="text-xs font-medium text-muted-foreground uppercase tracking-wider flex items-center gap-2 group-disabled:opacity-70">
-                                    <KeyRound className="w-3 h-3" />
-                                    Senha de Instalação (Será criptografada AES-256)
-                                </Label>
-                                <Input
-                                    id="certPassword"
-                                    type="password"
-                                    placeholder="Insira a senha do certificado..."
-                                    className="bg-background/50 border-white/10 h-12"
-                                    {...register('password')}
-                                />
-                                {errors.password && (
-                                    <p className="text-xs text-destructive">{errors.password.message}</p>
-                                )}
-                            </div>
+                                {/* Password Field */}
+                                <div className="space-y-2">
+                                    <Label htmlFor="certPassword" className="text-xs font-medium text-muted-foreground uppercase tracking-wider flex items-center gap-2 group-disabled:opacity-70">
+                                        <KeyRound className="w-3 h-3" />
+                                        Senha de Instalação (Será criptografada AES-256)
+                                    </Label>
+                                    <Input
+                                        id="certPassword"
+                                        type="password"
+                                        placeholder="Insira a senha do certificado..."
+                                        className="bg-background/50 border-white/10 h-12"
+                                        {...register('password')}
+                                    />
+                                    {errors.password && (
+                                        <p className="text-xs text-destructive">{errors.password.message}</p>
+                                    )}
+                                </div>
 
-                            <Button
-                                type="submit"
-                                className="w-full h-12 font-medium"
-                                disabled={!file}
-                                isLoading={isLoading}
-                            >
-                                Guardar no Cofre Seguro
-                            </Button>
-                        </fieldset>
-                    </form>
-                </CardContent>
-            </Card>
+                                <Button
+                                    type="submit"
+                                    className="w-full h-12 font-medium"
+                                    disabled={!file}
+                                    isLoading={isLoading}
+                                >
+                                    Guardar no Cofre Seguro
+                                </Button>
+                            </fieldset>
+                        </form>
+                    </CardContent>
+                </Card>
+            </div>
         </div>
     );
 }

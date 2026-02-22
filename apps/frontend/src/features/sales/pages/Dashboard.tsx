@@ -106,39 +106,39 @@ export function Dashboard() {
 
             {/* KPI Cards */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <Card className="bg-gradient-to-br from-card/60 to-transparent border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-md p-4 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100 fill-mode-both hover:-translate-y-1 transition-transform">
-                    <div className="flex items-center gap-2 text-muted-foreground text-sm font-medium mb-2">
-                        <DollarSign className="w-4 h-4" /> Volume Transacionado
+                <Card className="bg-card border-white/[0.04] shadow-sm p-4 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-100 fill-mode-both hover:-translate-y-[2px] hover:border-white/10 transition-all">
+                    <div className="flex items-center gap-2 text-zinc-500 text-[11px] uppercase tracking-widest font-medium mb-3">
+                        <DollarSign className="w-3.5 h-3.5" /> Volume Transacionado
                     </div>
-                    <div className="text-2xl font-bold">
+                    <div className="text-2xl font-semibold tracking-tight text-white/95">
                         {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(kpi?.totalAmount || 0)}
                     </div>
                 </Card>
-                <Card className="bg-gradient-to-br from-emerald-500/10 to-transparent border-emerald-500/20 shadow-[inset_0_1px_0_rgba(16,185,129,0.1)] backdrop-blur-md p-4 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200 fill-mode-both hover:-translate-y-1 transition-transform">
-                    <div className="flex items-center gap-2 text-emerald-500 text-sm font-medium mb-2">
-                        <CheckCircle2 className="w-4 h-4" /> Faturas Emitidas
+                <Card className="bg-card border-white/[0.04] shadow-sm p-4 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-150 fill-mode-both hover:-translate-y-[2px] hover:border-emerald-500/30 transition-all">
+                    <div className="flex items-center gap-2 text-zinc-500 text-[11px] uppercase tracking-widest font-medium mb-3">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> Faturas Emitidas
                     </div>
-                    <div className="text-2xl font-bold text-emerald-500">{kpi?.totalSuccess || 0}</div>
+                    <div className="text-2xl font-semibold tracking-tight text-white/95">{kpi?.totalSuccess || 0}</div>
                 </Card>
-                <Card className="bg-gradient-to-br from-amber-500/10 to-transparent border-amber-500/20 shadow-[inset_0_1px_0_rgba(245,158,11,0.1)] backdrop-blur-md p-4 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300 fill-mode-both hover:-translate-y-1 transition-transform">
-                    <div className="flex items-center gap-2 text-amber-500 text-sm font-medium mb-2">
-                        <Activity className="w-4 h-4" /> Em Processamento
+                <Card className="bg-card border-white/[0.04] shadow-sm p-4 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-200 fill-mode-both hover:-translate-y-[2px] hover:border-amber-500/30 transition-all">
+                    <div className="flex items-center gap-2 text-zinc-500 text-[11px] uppercase tracking-widest font-medium mb-3">
+                        <Activity className="w-3.5 h-3.5 text-amber-500" /> Em Processamento
                     </div>
-                    <div className="text-2xl font-bold text-amber-500">{kpi?.totalProcessing || 0}</div>
+                    <div className="text-2xl font-semibold tracking-tight text-white/95">{kpi?.totalProcessing || 0}</div>
                 </Card>
-                <Card className="bg-gradient-to-br from-destructive/10 to-transparent border-destructive/20 shadow-[inset_0_1px_0_rgba(239,68,68,0.1)] backdrop-blur-md p-4 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-400 fill-mode-both hover:-translate-y-1 transition-transform">
-                    <div className="flex items-center gap-2 text-destructive text-sm font-medium mb-2">
-                        <XCircle className="w-4 h-4" /> Falhas de Emissão
+                <Card className="bg-card border-white/[0.04] shadow-sm p-4 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-300 fill-mode-both hover:-translate-y-[2px] hover:border-destructive/30 transition-all">
+                    <div className="flex items-center gap-2 text-zinc-500 text-[11px] uppercase tracking-widest font-medium mb-3">
+                        <XCircle className="w-3.5 h-3.5 text-destructive" /> Falhas
                     </div>
-                    <div className="text-2xl font-bold text-destructive">{kpi?.totalFailed || 0}</div>
+                    <div className="text-2xl font-semibold tracking-tight text-white/95">{kpi?.totalFailed || 0}</div>
                 </Card>
             </div>
 
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
                 {/* Painel Esquerdo: Notas (col-span-2) */}
-                <Card className="xl:col-span-2 bg-card/50 border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] backdrop-blur-xl overflow-hidden flex flex-col animate-in fade-in slide-in-from-bottom-6 duration-700 delay-500 fill-mode-both">
-                    <div className="p-4 border-b border-white/5 bg-muted/20 flex items-center justify-between">
-                        <h2 className="font-semibold flex items-center gap-2"><FileCode2 className="w-4 h-4 opacity-70" /> Histórico de Notas Fiscais</h2>
+                <Card className="xl:col-span-2 bg-card border-white/[0.04] shadow-sm overflow-hidden flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-500 delay-400 fill-mode-both">
+                    <div className="p-4 border-b border-white/[0.04] flex items-center justify-between">
+                        <h2 className="font-semibold text-white/90 tracking-tight text-sm">Transações Recentes</h2>
 
                         <div className="flex gap-2">
                             <Button
@@ -249,36 +249,36 @@ export function Dashboard() {
                                                             </Button>
                                                         )}
                                                     </DialogHeader>
-                                                    <DialogDescription>
-                                                        ID Trace: <code className="text-xs ml-1">{note.id}</code>
+                                                    <DialogDescription className="text-zinc-500 text-xs font-mono">
+                                                        ID Trace: {note.id}
                                                     </DialogDescription>
 
                                                     <div className="mt-4 space-y-4">
                                                         {note.errorMessage && (
-                                                            <div className="p-4 bg-destructive/10 border border-destructive/20 rounded-lg">
-                                                                <h4 className="text-sm font-semibold text-destructive mb-1 flex items-center gap-2">
+                                                            <div className="p-4 bg-destructive/5 border border-destructive/20 rounded-md">
+                                                                <h4 className="text-sm font-medium text-destructive mb-1 flex items-center gap-2">
                                                                     <AlertCircle className="w-4 h-4" /> Resposta da Prefeitura (Erro)
                                                                 </h4>
-                                                                <p className="text-sm font-mono text-destructive/90 break-all">{note.errorMessage}</p>
+                                                                <p className="text-xs font-mono text-destructive/80 break-all">{note.errorMessage}</p>
                                                             </div>
                                                         )}
 
                                                         {note.protocol && (
-                                                            <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
-                                                                <h4 className="text-sm font-semibold text-emerald-500 mb-1 flex items-center gap-2">
+                                                            <div className="p-4 bg-emerald-500/5 border border-emerald-500/20 rounded-md">
+                                                                <h4 className="text-sm font-medium text-emerald-500 mb-1 flex items-center gap-2">
                                                                     <CheckCircle2 className="w-4 h-4" /> Resposta da Prefeitura (Sucesso)
                                                                 </h4>
-                                                                <p className="text-sm font-mono text-emerald-500/90 break-all">Protocolo oficial recebido via XML: {note.protocol}</p>
+                                                                <p className="text-xs font-mono text-emerald-500/80 break-all">Protocolo oficial recebido via XML: {note.protocol}</p>
                                                             </div>
                                                         )}
 
-                                                        <div className="rounded-lg border border-white/10 overflow-hidden bg-[#1e1e1e]">
-                                                            <div className="px-4 py-2 bg-black/40 border-b border-white/10 flex items-center gap-2">
-                                                                <FileCode2 className="w-4 h-4 text-muted-foreground" />
-                                                                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Payload Trace (Simplificado)</span>
+                                                        <div className="rounded-md border border-white/[0.04] overflow-hidden bg-black/60 shadow-inner">
+                                                            <div className="px-4 py-2 bg-white/[0.02] border-b border-white/[0.04] flex items-center gap-2">
+                                                                <FileCode2 className="w-4 h-4 text-zinc-500" />
+                                                                <span className="text-[10px] font-medium text-zinc-500 uppercase tracking-widest">Payload Trace</span>
                                                             </div>
                                                             <div className="p-4 overflow-auto max-h-[300px]">
-                                                                <pre className="text-xs text-blue-300 font-mono">
+                                                                <pre className="text-[11px] text-zinc-400 font-mono leading-relaxed">
                                                                     {JSON.stringify(note, null, 2)}
                                                                 </pre>
                                                             </div>
@@ -296,9 +296,10 @@ export function Dashboard() {
                 </Card>
 
                 {/* Painel Direito: Certificados */}
-                <Card className="bg-card/50 border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] backdrop-blur-xl overflow-hidden flex flex-col h-fit animate-in fade-in slide-in-from-bottom-6 duration-700 delay-500 fill-mode-both">
-                    <div className="p-4 border-b border-white/5 bg-muted/20">
-                        <h2 className="font-semibold flex items-center gap-2"><ShieldCheck className="w-4 h-4 opacity-70" /> Cofre de Certificados</h2>
+                <Card className="bg-card border-white/[0.04] shadow-sm overflow-hidden flex flex-col h-fit animate-in fade-in slide-in-from-bottom-4 duration-500 delay-500 fill-mode-both">
+                    <div className="p-4 border-b border-white/[0.04] flex items-center gap-2">
+                        <ShieldCheck className="w-4 h-4 text-zinc-500" />
+                        <h2 className="font-semibold text-white/90 tracking-tight text-sm">Cofre de Certificados</h2>
                     </div>
                     <div className="p-0">
                         {isLoadingCerts ? (

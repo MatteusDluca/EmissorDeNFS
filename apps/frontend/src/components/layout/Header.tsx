@@ -14,19 +14,19 @@ export function Header() {
     ];
 
     return (
-        <header className="sticky top-0 z-50 w-full border-b border-white/5 bg-background/60 backdrop-blur-2xl shadow-[inset_0_-1px_0_rgba(255,255,255,0.02)] supports-[backdrop-filter]:bg-background/40 transition-colors">
+        <header className="sticky top-0 z-50 w-full border-b border-white/[0.04] bg-black/60 backdrop-blur-md supports-[backdrop-filter]:bg-black/40 transition-colors">
             <div className="container mx-auto px-4 h-16 flex items-center justify-between">
                 <div className="flex items-center gap-8">
                     <div className="flex items-center gap-2 group cursor-pointer">
-                        <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center border border-primary/20 group-hover:bg-primary/20 group-hover:border-primary/40 transition-all group-hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]">
-                            <FileSignature className="w-4 h-4 text-primary" />
+                        <div className="w-8 h-8 rounded-md bg-white/5 flex items-center justify-center border border-white/10 group-hover:bg-white/10 transition-all">
+                            <FileSignature className="w-4 h-4 text-white" />
                         </div>
-                        <span className="font-semibold text-lg tracking-tight hidden sm:inline-block">
+                        <span className="font-semibold text-lg tracking-tight hidden sm:inline-block text-white/95">
                             NFS-e
                         </span>
                     </div>
 
-                    <nav className="flex items-center gap-1">
+                    <nav className="flex items-center gap-4 ml-4">
                         {navItems.map((item) => {
                             const isActive = location.pathname.startsWith(item.path);
                             const Icon = item.icon;
@@ -34,13 +34,13 @@ export function Header() {
                                 <Link
                                     key={item.path}
                                     to={item.path}
-                                    className={`flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 ${isActive
-                                        ? 'bg-white/10 text-foreground shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]'
-                                        : 'text-muted-foreground hover:bg-white/5 hover:text-foreground'
+                                    className={`flex items-center gap-2 text-sm transition-all duration-200 ${isActive
+                                        ? 'text-white font-medium drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]'
+                                        : 'text-zinc-500 hover:text-white'
                                         }`}
                                 >
                                     <Icon className="w-4 h-4" />
-                                    <span className="hidden sm:inline-block">{item.name}</span>
+                                    <span className="hidden sm:inline-block tracking-tight">{item.name}</span>
                                 </Link>
                             );
                         })}

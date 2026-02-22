@@ -64,23 +64,23 @@ export function SalesCreate() {
     return (
         <div className="max-w-2xl mx-auto py-8">
             <div className="mb-8 flex items-center gap-3">
-                <div className="p-3 bg-primary/10 rounded-xl border border-primary/20">
-                    <FileText className="w-6 h-6 text-primary" />
+                <div className="p-3 bg-white/5 rounded-xl border border-white/10">
+                    <FileText className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                    <h1 className="text-3xl font-semibold tracking-tight">Nova Venda</h1>
-                    <p className="text-muted-foreground mt-1">Gere uma fatura e dispare o processamento assíncrono da NFS-e</p>
+                    <h1 className="text-3xl font-semibold tracking-tight text-white/95">Nova Venda</h1>
+                    <p className="text-zinc-500 mt-1">Gere uma fatura e dispare o processamento assíncrono da NFS-e</p>
                 </div>
             </div>
 
-            <Card className="bg-card/40 border-white/5 shadow-xl backdrop-blur-sm">
-                <CardHeader>
-                    <CardTitle className="text-xl">Dados da Prestação de Serviço</CardTitle>
-                    <CardDescription>
+            <Card className="bg-card border-white/[0.04] shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <CardHeader className="border-b border-white/[0.04] bg-white/[0.01]">
+                    <CardTitle className="text-xl tracking-tight text-white/95">Dados da Prestação de Serviço</CardTitle>
+                    <CardDescription className="text-zinc-500">
                         Ao salvar, a API responderá imediatamente (Status 202) e o Worker montará o XML em background.
                     </CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="pt-6">
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                         <fieldset disabled={isLoading} className="space-y-6 group disabled:opacity-80 transition-opacity">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">

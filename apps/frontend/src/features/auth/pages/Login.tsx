@@ -54,16 +54,16 @@ export function Login() {
     };
 
     return (
-        <div className="min-h-screen w-full flex items-center justify-center bg-background bg-grid-white/[0.02]">
-            <div className="absolute inset-0 flex items-center justify-center bg-background [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
+        <div className="min-h-screen w-full flex items-center justify-center bg-black bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:24px_24px] relative overflow-hidden">
+            <div className="absolute inset-0 bg-black [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,transparent_0%,black_100%)]"></div>
 
-            <Card className="z-10 w-full max-w-md bg-card/50 backdrop-blur-xl border border-white/5 shadow-2xl">
+            <Card className="z-10 w-full max-w-md bg-card border border-white/[0.04] shadow-2xl relative animate-in fade-in slide-in-from-bottom-4 duration-700">
                 <CardHeader className="space-y-2 text-center pb-6">
-                    <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-primary/20">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 text-primary"><path d="M12 2v20" /><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></svg>
+                    <div className="w-12 h-12 bg-white/5 rounded-md flex items-center justify-center mx-auto mb-4 border border-white/10">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 text-white"><path d="M12 2v20" /><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></svg>
                     </div>
-                    <CardTitle className="text-2xl font-semibold tracking-tight">NFS-e Emissor</CardTitle>
-                    <CardDescription className="text-muted-foreground/80">
+                    <CardTitle className="text-2xl font-semibold tracking-tight text-white/95">NFS-e Emissor</CardTitle>
+                    <CardDescription className="text-zinc-500">
                         Insira suas credenciais para acessar o painel
                     </CardDescription>
                 </CardHeader>
