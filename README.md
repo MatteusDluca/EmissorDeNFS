@@ -27,7 +27,7 @@
 - [Trade-offs e Decisões Técnicas](#trade-offs-e-decisões-técnicas)
 - [Uso de IA e Ferramentas](#uso-de-ia-e-ferramentas)
 - [Limitações Conhecidas](#limitações-conhecidas)
-- [Demonstração em Vídeo (Plano B)](#demonstração-em-vídeo-plano-b)
+- [Demonstração e Acesso Temporário](#demonstração-e-acesso-temporário)
 - [Contato](#contato)
 
 ---
@@ -383,18 +383,11 @@ Ferramentas de IA generativa foram usadas como **pair programmer** durante o des
 
 ---
 
-## Demonstração em Vídeo (Plano B)
+## Demonstração e Acesso Temporário
 
-> **[Link do vídeo de demonstração em breve]**
+Devido às limitações dos free tiers de plataformas cloud (que não suportam a carga combinada de um Monorepo com Banco, Filas, Redis, API, Worker Headless e Nginx sem hibernação ou custos elevados), a entrega inicial conta com um **ambiente de testes disponibilizado temporariamente via Ngrok**.
 
-Devido às limitações dos free tiers de plataformas cloud, a entrega foi feita via **vídeo de demonstração com containerização local (Plano B)**, cumprindo o roteiro exigido no edital:
-
-1. `docker compose up` subindo os 6 serviços do zero
-2. Login na aplicação com usuário *seed*
-3. Upload de certificado digital .pfx
-4. Criação de uma *Sale* (Venda) pelo formulário
-5. Status mudando na lista (PROCESSING → SUCCESS / ERROR)
-6. (Bônus) Notificação de sucesso via Telegram com integração N8n
+Neste ambiente homologado em minha máquina local, os 6 containers estão orquestrados e funcionando em tempo real. O acesso e credenciais foram encaminhados diretamente via mensagem/e-mail para a equipe de avaliação.
 
 ---
 
