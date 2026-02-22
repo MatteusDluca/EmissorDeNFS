@@ -22,8 +22,8 @@ app.post('/nfse', (req, res) => {
     const delay = 2000 + Math.random() * 1000; // 2-3 segundos
 
     setTimeout(() => {
-        // 70% de chance de sucesso, 30% de erro
-        const isSuccess = Math.random() < 0.70;
+        // 50% de chance de sucesso, 50% de erro (Aumentado para demonstração)
+        const isSuccess = Math.random() < 0.50;
 
         if (isSuccess) {
             const protocol = generateProtocol();
