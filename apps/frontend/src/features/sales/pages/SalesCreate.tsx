@@ -82,56 +82,57 @@ export function SalesCreate() {
                 </CardHeader>
                 <CardContent>
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                            <div className="space-y-2">
-                                <Label htmlFor="externalId" className="text-xs font-medium text-muted-foreground uppercase tracking-wider">ID Origem (Seu Sistema)</Label>
-                                <Input id="externalId" className="bg-background/50 h-11" {...register('externalId')} />
-                                {errors.externalId && <p className="text-xs text-destructive">{errors.externalId.message}</p>}
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="amount" className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Valor do Serviço (R$)</Label>
-                                <Input type="number" step="0.01" id="amount" className="bg-background/50 h-11" {...register('amount')} />
-                                {errors.amount && <p className="text-xs text-destructive">{errors.amount.message}</p>}
-                            </div>
-                        </div>
-
-                        <div className="space-y-5 pt-4 border-t border-white/5">
-                            <h3 className="text-sm font-medium text-foreground">Tomador do Serviço (Cliente)</h3>
-
+                        <fieldset disabled={isLoading} className="space-y-6 group disabled:opacity-80 transition-opacity">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div className="space-y-2">
-                                    <Label htmlFor="tomakerName" className="text-xs font-medium text-muted-foreground">NOME / RAZÃO SOCIAL</Label>
-                                    <Input id="tomakerName" placeholder="Empresa Cliente LTDA" className="bg-background/50 h-11" {...register('tomakerName')} />
-                                    {errors.tomakerName && <p className="text-xs text-destructive">{errors.tomakerName.message}</p>}
+                                    <Label htmlFor="externalId" className="text-xs font-medium text-muted-foreground uppercase tracking-wider group-disabled:opacity-70">ID Origem (Seu Sistema)</Label>
+                                    <Input id="externalId" className="bg-background/50 h-11" {...register('externalId')} />
+                                    {errors.externalId && <p className="text-xs text-destructive">{errors.externalId.message}</p>}
                                 </div>
+
                                 <div className="space-y-2">
-                                    <Label htmlFor="tomakerDocument" className="text-xs font-medium text-muted-foreground">CNPJ / CPF</Label>
-                                    <Input id="tomakerDocument" placeholder="00.000.000/0001-00" className="bg-background/50 h-11" {...register('tomakerDocument')} />
-                                    {errors.tomakerDocument && <p className="text-xs text-destructive">{errors.tomakerDocument.message}</p>}
+                                    <Label htmlFor="amount" className="text-xs font-medium text-muted-foreground uppercase tracking-wider group-disabled:opacity-70">Valor do Serviço (R$)</Label>
+                                    <Input type="number" step="0.01" id="amount" className="bg-background/50 h-11" {...register('amount')} />
+                                    {errors.amount && <p className="text-xs text-destructive">{errors.amount.message}</p>}
                                 </div>
                             </div>
 
-                            <div className="space-y-2">
-                                <Label htmlFor="tomakerEmail" className="text-xs font-medium text-muted-foreground">E-MAIL DO TOMADOR</Label>
-                                <Input id="tomakerEmail" type="email" placeholder="financeiro@empresa.com" className="bg-background/50 h-11" {...register('tomakerEmail')} />
-                                {errors.tomakerEmail && <p className="text-xs text-destructive">{errors.tomakerEmail.message}</p>}
+                            <div className="space-y-5 pt-4 border-t border-white/5">
+                                <h3 className="text-sm font-medium text-foreground group-disabled:opacity-70">Tomador do Serviço (Cliente)</h3>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="tomakerName" className="text-xs font-medium text-muted-foreground group-disabled:opacity-70">NOME / RAZÃO SOCIAL</Label>
+                                        <Input id="tomakerName" placeholder="Empresa Cliente LTDA" className="bg-background/50 h-11" {...register('tomakerName')} />
+                                        {errors.tomakerName && <p className="text-xs text-destructive">{errors.tomakerName.message}</p>}
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="tomakerDocument" className="text-xs font-medium text-muted-foreground group-disabled:opacity-70">CNPJ / CPF</Label>
+                                        <Input id="tomakerDocument" placeholder="00.000.000/0001-00" className="bg-background/50 h-11" {...register('tomakerDocument')} />
+                                        {errors.tomakerDocument && <p className="text-xs text-destructive">{errors.tomakerDocument.message}</p>}
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="tomakerEmail" className="text-xs font-medium text-muted-foreground group-disabled:opacity-70">E-MAIL DO TOMADOR</Label>
+                                    <Input id="tomakerEmail" type="email" placeholder="financeiro@empresa.com" className="bg-background/50 h-11" {...register('tomakerEmail')} />
+                                    {errors.tomakerEmail && <p className="text-xs text-destructive">{errors.tomakerEmail.message}</p>}
+                                </div>
                             </div>
-                        </div>
 
-                        <div className="space-y-2 pt-4 border-t border-white/5">
-                            <Label htmlFor="serviceDescription" className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Descrição dos Serviços (Corpo da NF)</Label>
-                            <Input id="serviceDescription" placeholder="Desenvolvimento de software..." className="bg-background/50 h-11" {...register('serviceDescription')} />
-                            {errors.serviceDescription && <p className="text-xs text-destructive">{errors.serviceDescription.message}</p>}
-                        </div>
+                            <div className="space-y-2 pt-4 border-t border-white/5">
+                                <Label htmlFor="serviceDescription" className="text-xs font-medium text-muted-foreground uppercase tracking-wider group-disabled:opacity-70">Descrição dos Serviços (Corpo da NF)</Label>
+                                <Input id="serviceDescription" placeholder="Desenvolvimento de software..." className="bg-background/50 h-11" {...register('serviceDescription')} />
+                                {errors.serviceDescription && <p className="text-xs text-destructive">{errors.serviceDescription.message}</p>}
+                            </div>
 
-                        <div className="pt-4">
-                            <Button type="submit" className="w-full h-12 font-medium bg-primary hover:bg-primary/90 transition-all gap-2" disabled={isLoading}>
-                                {isLoading ? 'Enfileirando job no Redis...' : 'Finalizar Venda e Emitir NFS-e'}
-                                {!isLoading && <Send className="w-4 h-4" />}
-                            </Button>
-                        </div>
+                            <div className="pt-4">
+                                <Button type="submit" className="w-full h-12 font-medium bg-primary hover:bg-primary/90 transition-all gap-2" isLoading={isLoading}>
+                                    {!isLoading && <Send className="w-4 h-4" />}
+                                    Finalizar Venda e Emitir NFS-e
+                                </Button>
+                            </div>
+                        </fieldset>
                     </form>
                 </CardContent>
             </Card>

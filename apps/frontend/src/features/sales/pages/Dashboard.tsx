@@ -47,7 +47,7 @@ export function Dashboard() {
         }
     });
 
-    const { data: notes, isLoading, isError, refetch: refetchNotes } = useQuery({
+    const { data: notes, isLoading, isFetching: isFetchingNotes, isError, refetch: refetchNotes } = useQuery({
         queryKey: ['notes', statusFilter],
         queryFn: fetchNotes,
         refetchInterval: (query) => {
@@ -58,11 +58,13 @@ export function Dashboard() {
         },
     });
 
-    const { data: kpi, refetch: refetchKpi } = useQuery({
+    const { data: kpi, refetch: refetchKpi, isFetching: isFetchingKpi } = useQuery({
         queryKey: ['kpi'],
         queryFn: fetchKpi,
         refetchInterval: 3000,
     });
+
+    const isGlobalFetching = isFetchingNotes || isFetchingKpi;
 
     const handleRefetch = () => {
         refetchNotes();
@@ -96,8 +98,9 @@ export function Dashboard() {
                     <h1 className="text-3xl font-semibold tracking-tight">Painel Resumo (Real-time)</h1>
                     <p className="text-muted-foreground mt-1">Acompanhe as emissões de Notas Fiscais, KPIs e seus certificados instalados.</p>
                 </div>
-                <Button variant="outline" size="sm" onClick={handleRefetch} className="gap-2">
-                    <RefreshCw className="w-4 h-4" /> Atualizar Painel
+                <Button variant="outline" size="sm" onClick={handleRefetch} className="gap-2" isLoading={isGlobalFetching && !isLoading}>
+                    {!isGlobalFetching && <RefreshCw className="w-4 h-4" />}
+                    Atualizar Painel
                 </Button>
             </div>
 
@@ -238,10 +241,10 @@ export function Dashboard() {
                                                                 size="sm"
                                                                 variant="outline"
                                                                 onClick={() => retryMutation.mutate(note.id)}
-                                                                disabled={retryMutation.isPending}
+                                                                isLoading={retryMutation.isPending}
                                                                 className="ml-auto flex border-destructive/50 text-destructive hover:bg-destructive/10 gap-2"
                                                             >
-                                                                {retryMutation.isPending ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                                                                {!retryMutation.isPending && <Send className="w-4 h-4" />}
                                                                 Tentar Novamente
                                                             </Button>
                                                         )}

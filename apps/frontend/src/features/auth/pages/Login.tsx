@@ -69,42 +69,44 @@ export function Login() {
                 </CardHeader>
                 <CardContent>
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                        <div className="space-y-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="username" className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Usuário</Label>
-                                <Input
-                                    id="username"
-                                    placeholder="admin"
-                                    className="bg-background/50 border-white/10 focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary transition-all rounded-md h-12"
-                                    {...register('username')}
-                                />
-                                {errors.username && (
-                                    <p className="text-xs text-destructive">{errors.username.message}</p>
-                                )}
-                            </div>
-                            <div className="space-y-2">
-                                <div className="flex items-center justify-between">
-                                    <Label htmlFor="password" className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Senha</Label>
+                        <fieldset disabled={isLoading} className="space-y-6 group disabled:opacity-80 transition-opacity">
+                            <div className="space-y-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="username" className="text-xs font-medium text-muted-foreground uppercase tracking-wider group-disabled:opacity-70">Usuário</Label>
+                                    <Input
+                                        id="username"
+                                        placeholder="admin"
+                                        className="bg-background/50 border-white/10 focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary transition-all rounded-md h-12"
+                                        {...register('username')}
+                                    />
+                                    {errors.username && (
+                                        <p className="text-xs text-destructive">{errors.username.message}</p>
+                                    )}
                                 </div>
-                                <Input
-                                    id="password"
-                                    type="password"
-                                    placeholder="••••••••"
-                                    className="bg-background/50 border-white/10 focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary transition-all rounded-md h-12"
-                                    {...register('password')}
-                                />
-                                {errors.password && (
-                                    <p className="text-xs text-destructive">{errors.password.message}</p>
-                                )}
+                                <div className="space-y-2">
+                                    <div className="flex items-center justify-between">
+                                        <Label htmlFor="password" className="text-xs font-medium text-muted-foreground uppercase tracking-wider group-disabled:opacity-70">Senha</Label>
+                                    </div>
+                                    <Input
+                                        id="password"
+                                        type="password"
+                                        placeholder="••••••••"
+                                        className="bg-background/50 border-white/10 focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary transition-all rounded-md h-12"
+                                        {...register('password')}
+                                    />
+                                    {errors.password && (
+                                        <p className="text-xs text-destructive">{errors.password.message}</p>
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                        <Button
-                            type="submit"
-                            className="w-full h-12 font-medium bg-primary hover:bg-primary/90 text-primary-foreground transition-all rounded-md shadow-[0_0_20px_rgba(255,255,255,0.05)]"
-                            disabled={isLoading}
-                        >
-                            {isLoading ? 'Autenticando...' : 'Acessar Plataforma'}
-                        </Button>
+                            <Button
+                                type="submit"
+                                className="w-full h-12 font-medium bg-primary hover:bg-primary/90 text-primary-foreground transition-all rounded-md shadow-[0_0_20px_rgba(255,255,255,0.05)]"
+                                isLoading={isLoading}
+                            >
+                                Acessar Plataforma
+                            </Button>
+                        </fieldset>
                     </form>
                 </CardContent>
             </Card>
