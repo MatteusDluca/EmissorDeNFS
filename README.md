@@ -383,11 +383,14 @@ Ferramentas de IA generativa foram usadas como **pair programmer** durante o des
 
 ---
 
-## Demonstração e Acesso Temporário
+## Demonstração e Acesso Temporário (via Ngrok)
 
-Devido às limitações dos free tiers de plataformas cloud (que não suportam a carga combinada de um Monorepo com Banco, Filas, Redis, API, Worker Headless e Nginx sem hibernação ou custos elevados), a entrega inicial conta com um **ambiente de testes disponibilizado temporariamente via Ngrok**.
+**Por que estamos usando Ngrok?** 
+Devido às pesadas limitações dos *free tiers* de plataformas cloud atuais (como Render, Railway ou Fly.io), não é viável hospedar simultaneamente uma arquitetura completa baseada em microsserviços. O sistema exige a execução paralela de **6 containers** (Nginx, API, Worker Headless, PostgreSQL, Redis e a Prefeitura Mock). Tentar hospedar tudo de forma gratuita resultaria em falta de recurso (OOM) ou servidores hibernando a cada requisição.
 
-Neste ambiente homologado em minha máquina local, os 6 containers estão orquestrados e funcionando em tempo real. O acesso e credenciais foram encaminhados diretamente via mensagem/e-mail para a equipe de avaliação.
+Para garantir a melhor avaliação possível, o cenário ideal escolhido foi realizar o **deploy local** na máquina do desenvolvedor e expor a aplicação online através de um túnel reverso seguro utilizando o **Ngrok**.
+
+O link público e as credenciais de teste foram encaminhados diretamente via e-mail/mensagem para a equipe de recrutamento.
 
 ---
 
