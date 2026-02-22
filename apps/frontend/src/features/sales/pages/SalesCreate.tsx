@@ -62,8 +62,8 @@ export function SalesCreate() {
     };
 
     return (
-        <div className="max-w-2xl mx-auto py-8">
-            <div className="mb-8 flex items-center gap-3">
+        <div className="max-w-2xl mx-auto py-2">
+            <div className="mb-6 flex items-center gap-3">
                 <div className="p-3 bg-white/5 rounded-xl border border-white/10">
                     <FileText className="w-6 h-6 text-white" />
                 </div>
@@ -80,9 +80,9 @@ export function SalesCreate() {
                         Ao salvar, a API responderá imediatamente (Status 202) e o Worker montará o XML em background.
                     </CardDescription>
                 </CardHeader>
-                <CardContent className="pt-6">
-                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                        <fieldset disabled={isLoading} className="space-y-6 group disabled:opacity-80 transition-opacity">
+                <CardContent className="pt-4">
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                        <fieldset disabled={isLoading} className="space-y-4 group disabled:opacity-80 transition-opacity">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                 <div className="space-y-2">
                                     <Label htmlFor="externalId" className="text-xs font-medium text-muted-foreground uppercase tracking-wider group-disabled:opacity-70">ID Origem (Seu Sistema)</Label>

@@ -80,7 +80,7 @@ describe('Frontend Integration Tests', () => {
         render(<App />);
 
         await waitFor(() => {
-            expect(screen.getByText('Cofre de Assinatura')).toBeInTheDocument();
+            expect(screen.getByText('Cofre de Certificados')).toBeInTheDocument();
             expect(screen.getByText(/Apenas arquivos .pfx/i)).toBeInTheDocument();
         });
     });
