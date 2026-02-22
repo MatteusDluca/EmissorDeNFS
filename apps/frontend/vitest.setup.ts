@@ -3,13 +3,13 @@ import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 
 export const handlers = [
-    http.post('http://localhost:3000/auth/login', () => {
+    http.post('/api/auth/login', () => {
         return HttpResponse.json({ accessToken: 'fake-token' })
     }),
-    http.get('http://localhost:3000/notes/kpi', () => {
+    http.get('/api/notes/kpi', () => {
         return HttpResponse.json({ totalAmount: 15000, totalSuccess: 1, totalFailed: 0, totalProcessing: 1 })
     }),
-    http.get('http://localhost:3000/notes', () => {
+    http.get('/api/notes', () => {
         return HttpResponse.json({
             total: 2,
             notes: [
@@ -18,7 +18,7 @@ export const handlers = [
             ]
         })
     }),
-    http.post('http://localhost:3000/certificates/upload', () => {
+    http.post('/api/certificates/upload', () => {
         return HttpResponse.json({ success: true })
     })
 ];

@@ -106,7 +106,7 @@ export function Dashboard() {
 
             {/* KPI Cards */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <Card className="bg-card/40 border-white/5 backdrop-blur-sm p-4">
+                <Card className="bg-gradient-to-br from-card/60 to-transparent border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-md p-4 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100 fill-mode-both hover:-translate-y-1 transition-transform">
                     <div className="flex items-center gap-2 text-muted-foreground text-sm font-medium mb-2">
                         <DollarSign className="w-4 h-4" /> Volume Transacionado
                     </div>
@@ -114,19 +114,19 @@ export function Dashboard() {
                         {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(kpi?.totalAmount || 0)}
                     </div>
                 </Card>
-                <Card className="bg-emerald-500/5 border-emerald-500/20 backdrop-blur-sm p-4">
+                <Card className="bg-gradient-to-br from-emerald-500/10 to-transparent border-emerald-500/20 shadow-[inset_0_1px_0_rgba(16,185,129,0.1)] backdrop-blur-md p-4 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200 fill-mode-both hover:-translate-y-1 transition-transform">
                     <div className="flex items-center gap-2 text-emerald-500 text-sm font-medium mb-2">
                         <CheckCircle2 className="w-4 h-4" /> Faturas Emitidas
                     </div>
                     <div className="text-2xl font-bold text-emerald-500">{kpi?.totalSuccess || 0}</div>
                 </Card>
-                <Card className="bg-amber-500/5 border-amber-500/20 backdrop-blur-sm p-4">
+                <Card className="bg-gradient-to-br from-amber-500/10 to-transparent border-amber-500/20 shadow-[inset_0_1px_0_rgba(245,158,11,0.1)] backdrop-blur-md p-4 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300 fill-mode-both hover:-translate-y-1 transition-transform">
                     <div className="flex items-center gap-2 text-amber-500 text-sm font-medium mb-2">
                         <Activity className="w-4 h-4" /> Em Processamento
                     </div>
                     <div className="text-2xl font-bold text-amber-500">{kpi?.totalProcessing || 0}</div>
                 </Card>
-                <Card className="bg-destructive/5 border-destructive/20 backdrop-blur-sm p-4">
+                <Card className="bg-gradient-to-br from-destructive/10 to-transparent border-destructive/20 shadow-[inset_0_1px_0_rgba(239,68,68,0.1)] backdrop-blur-md p-4 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-400 fill-mode-both hover:-translate-y-1 transition-transform">
                     <div className="flex items-center gap-2 text-destructive text-sm font-medium mb-2">
                         <XCircle className="w-4 h-4" /> Falhas de Emissão
                     </div>
@@ -136,7 +136,7 @@ export function Dashboard() {
 
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
                 {/* Painel Esquerdo: Notas (col-span-2) */}
-                <Card className="xl:col-span-2 bg-card/40 border-white/5 shadow-xl backdrop-blur-sm overflow-hidden flex flex-col">
+                <Card className="xl:col-span-2 bg-card/50 border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] backdrop-blur-xl overflow-hidden flex flex-col animate-in fade-in slide-in-from-bottom-6 duration-700 delay-500 fill-mode-both">
                     <div className="p-4 border-b border-white/5 bg-muted/20 flex items-center justify-between">
                         <h2 className="font-semibold flex items-center gap-2"><FileCode2 className="w-4 h-4 opacity-70" /> Histórico de Notas Fiscais</h2>
 
@@ -205,7 +205,7 @@ export function Dashboard() {
                                 </TableRow>
                             ) : (
                                 notes.map((note) => (
-                                    <TableRow key={note.id} className="border-white/5 hover:bg-muted/30 transition-colors">
+                                    <TableRow key={note.id} className="border-white/5 hover:bg-white/5 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] transition-all duration-200">
                                         <TableCell className="font-medium text-xs font-mono text-muted-foreground">
                                             {note.externalId}
                                         </TableCell>
@@ -296,7 +296,7 @@ export function Dashboard() {
                 </Card>
 
                 {/* Painel Direito: Certificados */}
-                <Card className="bg-card/40 border-white/5 shadow-xl backdrop-blur-sm overflow-hidden flex flex-col h-fit">
+                <Card className="bg-card/50 border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] backdrop-blur-xl overflow-hidden flex flex-col h-fit animate-in fade-in slide-in-from-bottom-6 duration-700 delay-500 fill-mode-both">
                     <div className="p-4 border-b border-white/5 bg-muted/20">
                         <h2 className="font-semibold flex items-center gap-2"><ShieldCheck className="w-4 h-4 opacity-70" /> Cofre de Certificados</h2>
                     </div>
