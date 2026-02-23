@@ -2,10 +2,11 @@
     "name": "@nfse/prefeitura-mock",
     "version": "1.0.0",
     "description": "Mock da Prefeitura para emissão de NFS-e",
-    "main": "src/app.js",
+    "main": "dist/app.js",
     "scripts": {
-        "start": "node src/app.js",
-        "dev": "node --watch src/app.js",
+        "build": "tsc",
+        "start": "node dist/app.js",
+        "dev": "ts-node src/app.ts",
         "test": "echo \"Mock does not need tests\""
     },
     "dependencies": {
@@ -13,5 +14,11 @@
     },
     "keywords": [],
     "author": "Matteus Dluca",
-    "license": "MIT"
+    "license": "MIT",
+    "devDependencies": {
+        "@types/express": "^4.17.25",
+        "@types/node": "^20.19.33",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.9.3"
+    }
 }

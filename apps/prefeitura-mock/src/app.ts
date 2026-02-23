@@ -1,4 +1,4 @@
-const express = require('express');
+import express, { Request, Response } from 'express';
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -7,12 +7,12 @@ app.use(express.text({ type: ['text/xml', 'application/xml'] }));
 app.use(express.json());
 
 // ─── Health Check ──────────────────────────────────────────────
-app.get('/health', (_req, res) => {
+app.get('/health', (_req: Request, res: Response) => {
     res.json({ status: 'ok', service: 'prefeitura-mock' });
 });
 
 // ─── POST /nfse - Mock de emissão de NFS-e ─────────────────────
-app.post('/nfse', (req, res) => {
+app.post('/nfse', (req: Request, res: Response) => {
     const requestId = `REQ-${Date.now()}-${Math.random().toString(36).substring(2, 8)}`;
 
     console.log(`[${new Date().toISOString()}] [${requestId}] Recebendo requisição de emissão de NFS-e`);
@@ -115,11 +115,11 @@ function getRandomErrorCode() {
 }
 
 // ─── Start Server ──────────────────────────────────────────────
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, () => {
     console.log(`\n🏛️  Prefeitura Mock Service`);
     console.log(`   Rodando na porta ${PORT}`);
     console.log(`   Endpoint: POST /nfse`);
-    console.log(`   Taxa de sucesso: ~70%`);
+    console.log(`   Taxa de sucesso: ~50%`);
     console.log(`   Delay simulado: 2-3s\n`);
 });
 
