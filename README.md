@@ -1,13 +1,22 @@
-# NFS-e Emissor Simplificado
+# 🚀 Case de Sucesso: Sistema Full-Stack de Emissão de NFS-e
 
 [![CI Pipeline](https://github.com/MatteusDluca/EmissorDeNFS/actions/workflows/ci.yml/badge.svg)](https://github.com/MatteusDluca/EmissorDeNFS/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node.js](https://img.shields.io/badge/Node.js-20.x-339933?logo=node.js)](https://nodejs.org/)
 [![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker)](https://www.docker.com/)
 
-> Sistema **Full-Stack** de emissão de Nota Fiscal de Serviço eletrônica (NFS-e) com processamento assíncrono via filas, mock da prefeitura, criptografia de certificados digitais A1 e dashboard analítico com KPIs em tempo real.
+> 💡 **Resolução de Problemas Complexos:** Construído para solucionar os desafios arquiteturais de um cenário de negócios do mundo real: a emissão massiva de notas fiscais de forma resiliente, assíncrona e segura. Desenvolvido para atestar qualidade de nível sênior em design de sistemas, tolerância a falhas e práticas avançadas de documentação. O projeto atua hoje como um case público de proficiência técnica em Arquitetura de Microsserviços.
 
-**Desenvolvido por:** Matteus Dluca
+---
+
+## 🎯 O Desafio e a Solução
+
+O objetivo do projeto era construir um emissor de Notas Fiscais (NFS-e) do zero, lidando com desafios arquiteturais complexos do mundo real: processamento assíncrono em filas, tratamento de falhas externas e criptografia segura de dados sensíveis.
+
+**A solução final entregue é um:**
+> Sistema **Full-Stack** com emissão isolada em Background Workers via filas (BullMQ), resiliência ativa lidando com um mock instável de prefeitura, criptografia rigorosa dos certificados digitais A1 e um dashboard interativo moderno com KPIs em tempo real.
+
+**Arquitetura desenvolvida e documentada por:** [Matteus Dluca](https://github.com/MatteusDluca)
 
 ---
 
@@ -383,20 +392,17 @@ Ferramentas de IA generativa foram usadas como **pair programmer** durante o des
 
 ---
 
-## Demonstração, Acesso Temporário e Vídeo
+## Demonstração da Arquitetura em Execução
 
-> **[Link do vídeo de demonstração em breve]**
+O sistema foi desenhado para rodar localmente com alta fidelidade ao ambiente de produção. Para validar a estrutura completa de microsserviços — driblando limites rígidos de CPU/RAM em plataformas *cloud gratuitas* —, o deploy foi orquestrado via Docker com **6 containers independentes** (Nginx, API, Worker, DB, Redis, Mock).
 
-**Por que opções alternativas de deploy?**
-Devido às pesadas limitações dos *free tiers* de plataformas cloud atuais (como Render, Railway ou Fly.io), não é viável hospedar simultaneamente uma arquitetura completa baseada em microsserviços. O sistema exige a execução paralela de **6 containers** (Nginx, API, Worker Headless, PostgreSQL, Redis e a Prefeitura Mock). Tentar hospedar tudo de forma gratuita resultaria em falta de recursos (OOM) ou servidores hibernando a cada requisição.
+Para validar a solução de ponta a ponta em um cenário acessível externamente e de forma imersiva, todo o ambiente foi exposto ao vivo via **Ngrok**, permitindo interação com a aplicação multi-serviços em tempo real sem nenhum gargalo.
 
-Para garantir a melhor avaliação, o cenário escolhido foi realizar o **deploy local** na máquina do desenvolvedor e expor a aplicação online através de um túnel reverso seguro via **Ngrok**, além de gravar a execução em vídeo demonstrativo:
-
-1. `docker compose up` subindo os 6 serviços do zero
-2. Login na aplicação com usuário *seed*
-3. Upload de certificado digital .pfx
-4. Criação de uma *Venda* pelo formulário e fila BullMQ processando
-5. Notificação de sucesso via Telegram (Webhook N8n)
+**Fluxo principal validado com sucesso:**
+1. Inicialização de ambiente (`docker compose up -d`) provisionando o banco via *seed*.
+2. Validação Auth (JWT) e Upload isolado de *Certificado Digital*.
+3. Criação de Venda disparando eventos ao Worker de forma não bloqueante.
+4. Confirmação instantânea da NF processada resultando num alerta real no **Telegram** via N8n.
 
 ---
 
